@@ -5,6 +5,7 @@ import Alert from '../components/ui/Alert.jsx'
 import Button from '../components/ui/Button.jsx'
 import Input from '../components/ui/Input.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
+import { guardarCredenciales } from '../utils/credenciales.js'
 import { validarLogin } from '../utils/validaciones.js'
 
 export default function Login() {
@@ -27,7 +28,8 @@ export default function Login() {
     if (Object.keys(validation).length > 0) return
 
     try {
-      login(values.email, values.password)
+      const user = login(values.email, values.password)
+      guardarCredenciales({ email: values.email, password: values.password, name: user.name })
       // Si es un técnico sin aprobar, ProtectedRoute lo redirige a /cuenta-en-revision.
       navigate(from, { replace: true })
     } catch (err) {

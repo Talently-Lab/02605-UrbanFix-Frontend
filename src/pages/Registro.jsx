@@ -8,6 +8,7 @@ import Select from '../components/ui/Select.jsx'
 import { ESPECIALIDADES } from '../constants/mensajes.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import { ROLES } from '../router/roles.js'
+import { guardarCredenciales } from '../utils/credenciales.js'
 import { validarRegistro } from '../utils/validaciones.js'
 
 const ROLE_OPTIONS = [
@@ -44,6 +45,7 @@ export default function Registro() {
 
     try {
       register(values)
+      guardarCredenciales(values)
       // El técnico queda pendiente de aprobación: ProtectedRoute lo lleva a /cuenta-en-revision.
       navigate('/panel', { replace: true })
     } catch (err) {
