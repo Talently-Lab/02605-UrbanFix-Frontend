@@ -62,5 +62,5 @@ src/
 
 ## Documentación
 
-- [Listado inicial de componentes](docs/componentes.md)
+- [Inventario de componentes](docs/componentes.md)
 - [Arquitectura de rutas](docs/rutas.md)
