@@ -18,22 +18,23 @@ Estado: ✅ hecho (placeholder) · ⬜ pendiente
 
 | Componente | Descripción | Estado |
 |---|---|---|
-| `Button` | Variantes primario / secundario / peligro, estado de carga | ⬜ |
-| `Input`, `Textarea`, `Select` | Campos de formulario con etiqueta y mensaje de error | ⬜ |
+| `Button` | Variantes primario / secundario / peligro, estado de carga | ✅ (sin estado de carga) |
+| `Input`, `Textarea`, `Select` | Campos de formulario con etiqueta y mensaje de error | ✅ `Input`, `Select` · ⬜ `Textarea` |
 | `Card` | Contenedor para listados y resúmenes | ⬜ |
 | `Badge` | Etiqueta de estado de la solicitud | ⬜ |
 | `Modal` | Confirmaciones (p. ej. aceptar/rechazar trabajo) | ⬜ |
 | `Spinner` / `Loader` | Indicador de carga | ⬜ |
 | `EmptyState` | Mensaje cuando no hay datos | ⬜ |
-| `Alert` / `Toast` | Mensajes de éxito y error | ⬜ |
+| `Alert` / `Toast` | Mensajes de éxito y error | ✅ `Alert` · ⬜ `Toast` |
 
 ## 3. Autenticación (tres roles)
 
 | Componente | Descripción | Estado |
 |---|---|---|
-| `LoginForm` | Email y contraseña | ⬜ (hoy: login simulado) |
-| `RegisterForm` | Registro con selección de rol (cliente / técnico) | ⬜ |
-| `AuthContext` | Sesión del usuario, login y logout | ✅ (simulado) |
+| `LoginForm` | Email y contraseña con validaciones | ✅ (contra mock) |
+| `RegisterForm` | Registro con selección de rol (cliente / técnico, sin Admin); el técnico carga especialidad y zona | ✅ (contra mock) |
+| `CuentaEnRevision` | Pantalla para técnicos pendientes de aprobación o rechazados | ✅ |
+| `AuthContext` | Sesión del usuario, login, registro y logout | ✅ (simulado) |
 
 ## 4. Solicitudes de servicio
 

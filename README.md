@@ -32,6 +32,7 @@ La app queda en http://localhost:5173.
 | Ruta | Acceso |
 |---|---|
 | `/`, `/login`, `/registro` | Público |
+| `/cuenta-en-revision` | Técnico pendiente de aprobación o rechazado |
 | `/panel`, `/perfil` | Cualquier usuario autenticado |
 | `/solicitudes`, `/solicitudes/:id` | Cliente y técnico |
 | `/solicitudes/nueva` | Cliente |
@@ -39,19 +40,27 @@ La app queda en http://localhost:5173.
 
 Las rutas y sus permisos se definen en `src/router/index.jsx`; los roles, en `src/router/roles.js`.
 
-> **Sesión simulada:** mientras no exista el backend, `/login` permite entrar como cliente, técnico o administrador con un clic. La sesión se guarda en `localStorage` (`src/context/AuthContext.jsx`) y se reemplazará por la autenticación real.
+> **Autenticación simulada:** mientras no exista el backend, los usuarios se guardan en `localStorage` (`src/services/authMock.js`) y se reemplazará por la API real.
+>
+> - Registro en `/registro` como cliente o técnico (no hay registro de Admin). Los técnicos quedan **pendientes de aprobación** y solo ven `/cuenta-en-revision`.
+> - Admin de prueba (simula el seed del backend): `admin@urbanfix.com` / `admin1234`.
+> - Los textos de error están en `src/constants/mensajes.js` y son provisorios hasta tener los del Kit del cliente.
 
 ## Estructura
 
 ```
 src/
-├── components/   Componentes reutilizables
+├── components/   Componentes reutilizables (ui/: Button, Input, Select, Alert)
+├── constants/    Textos de mensajes y catálogos
 ├── context/      Estado global (sesión)
 ├── layouts/      Layout público y layout de la app autenticada
 ├── pages/        Una carpeta/archivo por pantalla
-└── router/       Rutas, protección por rol y roles
+├── router/       Rutas, protección por rol y roles
+├── services/     Acceso a datos (hoy: mock en localStorage)
+└── utils/        Validaciones de formularios
 ```
 
 ## Documentación
 
 - [Listado inicial de componentes](docs/componentes.md)
+- [Arquitectura de rutas](docs/rutas.md)
