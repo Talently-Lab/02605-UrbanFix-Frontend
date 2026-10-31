@@ -8,6 +8,10 @@ export const MENSAJES = {
   rolInvalido: 'El rol elegido no es válido.',
   emailEnUso: 'Ya existe una cuenta con este email.',
   credencialesInvalidas: 'Email o contraseña incorrectos.',
+  estadoInvalido: 'El estado elegido no es válido.',
+  tecnicoNoEncontrado: 'No se encontró el técnico.',
+  tecnicoAprobado: (name) => `${name} fue aprobado y ya puede recibir solicitudes.`,
+  tecnicoRechazado: (name) => `${name} fue rechazado.`,
 }
 
 // Provisorio hasta definir el catálogo de servicios con el equipo.

@@ -8,6 +8,7 @@ const links = [
   { to: '/solicitudes', label: 'Solicitudes', roles: [ROLES.CLIENTE, ROLES.TECNICO] },
   { to: '/solicitudes/nueva', label: 'Nueva solicitud', roles: [ROLES.CLIENTE] },
   { to: '/admin', label: 'Administración', roles: [ROLES.ADMIN] },
+  { to: '/admin/tecnicos', label: 'Técnicos', roles: [ROLES.ADMIN] },
   { to: '/perfil', label: 'Perfil' },
 ]
 

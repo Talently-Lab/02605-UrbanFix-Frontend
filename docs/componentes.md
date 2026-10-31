@@ -61,6 +61,7 @@ Estado: ✅ hecho (placeholder) · ⬜ pendiente
 
 | Componente | Descripción | Estado |
 |---|---|---|
+| `AdminTecnicos` | Aprobación de técnicos: pestañas por estado, aprobar / rechazar pendientes | ✅ (contra mock) |
 | `AdminUsuariosTable` | Listado de usuarios por rol | ⬜ |
 | `AdminSolicitudesTable` | Listado general de solicitudes | ⬜ |
 | `AdminStats` | Indicadores básicos (n.º de solicitudes, usuarios) | ⬜ |

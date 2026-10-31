@@ -36,13 +36,13 @@ La app queda en http://localhost:5173.
 | `/panel`, `/perfil` | Cualquier usuario autenticado |
 | `/solicitudes`, `/solicitudes/:id` | Cliente y técnico |
 | `/solicitudes/nueva` | Cliente |
-| `/admin` | Administrador |
+| `/admin`, `/admin/tecnicos` | Administrador |
 
 Las rutas y sus permisos se definen en `src/router/index.jsx`; los roles, en `src/router/roles.js`.
 
 > **Autenticación simulada:** mientras no exista el backend, los usuarios se guardan en `localStorage` (`src/services/authMock.js`) y se reemplazará por la API real.
 >
-> - Registro en `/registro` como cliente o técnico (no hay registro de Admin). Los técnicos quedan **pendientes de aprobación** y solo ven `/cuenta-en-revision`.
+> - Registro en `/registro` como cliente o técnico (no hay registro de Admin). Los técnicos quedan **pendientes de aprobación** y solo ven `/cuenta-en-revision` hasta que el Admin los apruebe en `/admin/tecnicos`.
 > - Admin de prueba (simula el seed del backend): `admin@urbanfix.com` / `admin1234`.
 > - Los textos de error están en `src/constants/mensajes.js` y son provisorios hasta tener los del Kit del cliente.
 

@@ -33,7 +33,7 @@ Hay tres roles: **cliente**, **técnico** y **administrador**. Cada usuario tien
 | `/solicitudes/nueva` | Nueva solicitud | ✔ | | | Crear una solicitud y elegir un técnico disponible | ✅ placeholder |
 | `/solicitudes/:id` | Detalle de solicitud | ✔ | ✔ | | Ver una solicitud, su estado y las acciones posibles (aceptar, rechazar, cancelar, finalizar) | ✅ placeholder |
 | `/admin` | Administración | | | ✔ | Resumen del panel admin | ✅ placeholder |
-| `/admin/tecnicos` | Aprobación de técnicos | | | ✔ | Listado de técnicos pendientes para aprobar o rechazar; desactivar técnicos | 🆕 |
+| `/admin/tecnicos` | Aprobación de técnicos | | | ✔ | Listado de técnicos pendientes para aprobar o rechazar; desactivar técnicos | ✅ aprobar/rechazar · 🆕 desactivar |
 | `/admin/usuarios` | Usuarios | | | ✔ | Listado de usuarios por rol | 🆕 |
 | `/admin/solicitudes` | Solicitudes (admin) | | | ✔ | Listado general de todas las solicitudes | 🆕 |
 
