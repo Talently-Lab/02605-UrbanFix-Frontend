@@ -61,3 +61,20 @@ export function getUserById(id) {
   const user = readUsers().find((u) => u.id === id)
   return user ? withoutPassword(user) : null
 }
+
+export function listTecnicos() {
+  return readUsers()
+    .filter((u) => u.role === ROLES.TECNICO)
+    .map(withoutPassword)
+}
+
+// Solo el Admin aprueba o rechaza técnicos (definición 2A). El backend deberá validar el rol.
+export function setEstadoTecnico(id, estado) {
+  if (!Object.values(ESTADOS_TECNICO).includes(estado)) throw new Error(MENSAJES.estadoInvalido)
+  const users = readUsers()
+  const tecnico = users.find((u) => u.id === id && u.role === ROLES.TECNICO)
+  if (!tecnico) throw new Error(MENSAJES.tecnicoNoEncontrado)
+  tecnico.estado = estado
+  saveUsers(users)
+  return withoutPassword(tecnico)
+}
