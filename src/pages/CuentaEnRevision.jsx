@@ -2,6 +2,7 @@ import { Navigate, useNavigate } from 'react-router'
 import AuthCard from '../components/AuthCard.jsx'
 import Alert from '../components/ui/Alert.jsx'
 import Button from '../components/ui/Button.jsx'
+import { getEspecialidadLabel } from '../constants/especialidades.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import { ESTADOS_TECNICO, necesitaAprobacion } from '../router/roles.js'
 
@@ -41,7 +42,7 @@ export default function CuentaEnRevision() {
           </div>
           <div>
             <dt className="inline font-medium">Especialidad: </dt>
-            <dd className="inline">{user.especialidad}</dd>
+            <dd className="inline">{getEspecialidadLabel(user.especialidad)}</dd>
           </div>
           <div>
             <dt className="inline font-medium">Zona: </dt>
