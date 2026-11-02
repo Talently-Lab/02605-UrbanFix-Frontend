@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Alert from '../../components/ui/Alert.jsx'
 import Button from '../../components/ui/Button.jsx'
+import { getEspecialidadLabel } from '../../constants/especialidades.js'
 import { MENSAJES } from '../../constants/mensajes.js'
 import { ESTADOS_TECNICO } from '../../router/roles.js'
 import { listTecnicos, setEstadoTecnico } from '../../services/authMock.js'
@@ -85,7 +86,7 @@ export default function AdminTecnicos() {
                 <p className="font-semibold text-slate-800">{tecnico.name}</p>
                 <p className="text-slate-500">{tecnico.email}</p>
                 <p className="mt-1 text-slate-600">
-                  {tecnico.especialidad} · {tecnico.zona}
+                  {getEspecialidadLabel(tecnico.especialidad)} · {tecnico.zona}
                 </p>
               </div>
               {tab === ESTADOS_TECNICO.PENDIENTE && (

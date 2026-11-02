@@ -13,15 +13,3 @@ export const MENSAJES = {
   tecnicoAprobado: (name) => `${name} fue aprobado y ya puede recibir solicitudes.`,
   tecnicoRechazado: (name) => `${name} fue rechazado.`,
 }
-
-// Provisorio hasta definir el catálogo de servicios con el equipo.
-export const ESPECIALIDADES = [
-  'Electricidad',
-  'Plomería',
-  'Gas',
-  'Cerrajería',
-  'Pintura',
-  'Albañilería',
-  'Carpintería',
-  'Climatización',
-]
