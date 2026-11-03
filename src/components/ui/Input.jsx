@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import FormField from './FormField.jsx'
 
 function EyeIcon({ open }) {
   return (
@@ -16,10 +17,7 @@ export default function Input({ label, name, error, type = 'text', className = '
   const isPassword = type === 'password'
 
   return (
-    <div className={className}>
-      <label htmlFor={name} className="mb-1 block text-sm font-medium text-slate-700">
-        {label}
-      </label>
+    <FormField label={label} name={name} error={error} errorId={errorId} className={className}>
       <div className="relative">
         <input
           id={name}
@@ -44,11 +42,6 @@ export default function Input({ label, name, error, type = 'text', className = '
           </button>
         )}
       </div>
-      {error && (
-        <p id={errorId} className="mt-1 text-sm text-red-600">
-          {error}
-        </p>
-      )}
-    </div>
+    </FormField>
   )
 }
