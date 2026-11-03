@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Alert from '../../components/ui/Alert.jsx'
 import Button from '../../components/ui/Button.jsx'
 import Card from '../../components/ui/Card.jsx'
+import EmptyState from '../../components/ui/EmptyState.jsx'
 import { getEspecialidadLabel } from '../../constants/especialidades.js'
 import { MENSAJES } from '../../constants/mensajes.js'
 import { ESTADOS_TECNICO } from '../../router/roles.js'
@@ -73,9 +74,7 @@ export default function AdminTecnicos() {
       )}
 
       {visibles.length === 0 ? (
-        <p className="mt-6 rounded-md border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500">
-          {EMPTY_MESSAGES[tab]}
-        </p>
+        <EmptyState className="mt-6" title={EMPTY_MESSAGES[tab]} />
       ) : (
         <ul className="mt-4 space-y-3">
           {visibles.map((tecnico) => (
