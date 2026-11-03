@@ -1,6 +1,14 @@
 import FormField from './FormField.jsx'
 
-export default function Select({ label, name, error, options, placeholder = 'Seleccioná una opción', className = '', ...props }) {
+export default function Select({
+  label,
+  name,
+  error,
+  options,
+  placeholder = 'Seleccioná una opción',
+  className = '',
+  ...props
+}) {
   const errorId = `${name}-error`
   return (
     <FormField label={label} name={name} error={error} errorId={errorId} className={className}>
