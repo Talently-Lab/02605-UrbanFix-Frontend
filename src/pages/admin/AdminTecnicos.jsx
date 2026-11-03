@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Alert from '../../components/ui/Alert.jsx'
 import Button from '../../components/ui/Button.jsx'
+import Card from '../../components/ui/Card.jsx'
 import { getEspecialidadLabel } from '../../constants/especialidades.js'
 import { MENSAJES } from '../../constants/mensajes.js'
 import { ESTADOS_TECNICO } from '../../router/roles.js'
@@ -78,9 +79,10 @@ export default function AdminTecnicos() {
       ) : (
         <ul className="mt-4 space-y-3">
           {visibles.map((tecnico) => (
-            <li
+            <Card
+              as="li"
               key={tecnico.id}
-              className="flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="text-sm">
                 <p className="font-semibold text-slate-800">{tecnico.name}</p>
@@ -97,7 +99,7 @@ export default function AdminTecnicos() {
                   </Button>
                 </div>
               )}
-            </li>
+            </Card>
           ))}
         </ul>
       )}
