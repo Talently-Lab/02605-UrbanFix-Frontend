@@ -15,7 +15,7 @@ Inventario de los componentes de interfaz del MVP (UF-W01-012). Basado en el alc
 | Sección                    | ✅  | 🟡  | ⬜  |
 | -------------------------- | :-: | :-: | :-: |
 | 1. Estructura y navegación |  5  |  0  |  1  |
-| 2. UI base                 |  4  |  1  |  7  |
+| 2. UI base                 | 11  |  1  |  1  |
 | 3. Autenticación           |  4  |  0  |  0  |
 | 4. Solicitudes de servicio |  0  |  3  |  6  |
 | 5. Panel y perfil          |  0  |  2  |  0  |
@@ -34,20 +34,21 @@ Inventario de los componentes de interfaz del MVP (UF-W01-012). Basado en el alc
 
 ## 2. UI base (reutilizables)
 
-| Componente   | Descripción                                                                              | Ubicación                      | Estado                         |
-| ------------ | ---------------------------------------------------------------------------------------- | ------------------------------ | ------------------------------ |
-| `Button`     | Variantes `primary` / `secondary` / `danger` y estado deshabilitado                      | `src/components/ui/Button.jsx` | ✅                             |
-| `Input`      | Campo con etiqueta y mensaje de error; en contraseñas, botón para mostrar u ocultar      | `src/components/ui/Input.jsx`  | ✅                             |
-| `Select`     | Lista desplegable con etiqueta y mensaje de error                                        | `src/components/ui/Select.jsx` | ✅                             |
-| `Alert`      | Mensajes de error, éxito e información                                                   | `src/components/ui/Alert.jsx`  | ✅                             |
-| `AuthCard`   | Contenedor de las pantallas de login, registro y cuenta en revisión                      | `src/components/AuthCard.jsx`  | 🟡 específico de autenticación |
-| `Textarea`   | Campo de texto largo (descripción de la solicitud)                                       | —                              | ⬜                             |
-| `Tabs`       | Pestañas con contador; hoy está dentro de `AdminTecnicos`, a extraer cuando se reutilice | —                              | ⬜                             |
-| `Card`       | Contenedor para listados y resúmenes                                                     | —                              | ⬜                             |
-| `Badge`      | Etiqueta de estado (solicitud, técnico)                                                  | —                              | ⬜                             |
-| `Modal`      | Confirmaciones (p. ej. rechazar o cancelar)                                              | —                              | ⬜                             |
-| `Spinner`    | Indicador de carga (cuando haya llamadas al backend)                                     | —                              | ⬜                             |
-| `EmptyState` | Mensaje cuando no hay datos; hoy resuelto dentro de `AdminTecnicos`                      | —                              | ⬜                             |
+| Componente   | Descripción                                                                                   | Ubicación                          | Estado                         |
+| ------------ | --------------------------------------------------------------------------------------------- | ---------------------------------- | ------------------------------ |
+| `Button`     | Variantes `primary` / `secondary` / `danger`, estado deshabilitado y de carga (`loading`)     | `src/components/ui/Button.jsx`     | ✅                             |
+| `FormField`  | Estructura común de los campos: etiqueta arriba y mensaje de error abajo                      | `src/components/ui/FormField.jsx`  | ✅                             |
+| `Input`      | Campo con etiqueta y mensaje de error; en contraseñas, botón para mostrar u ocultar           | `src/components/ui/Input.jsx`      | ✅                             |
+| `Select`     | Lista desplegable con opciones `{ value, label }`                                             | `src/components/ui/Select.jsx`     | ✅                             |
+| `Textarea`   | Campo de texto largo (descripción de la solicitud)                                            | `src/components/ui/Textarea.jsx`   | ✅                             |
+| `Alert`      | Mensajes de error, éxito e información                                                        | `src/components/ui/Alert.jsx`      | ✅                             |
+| `Badge`      | Etiqueta de estado con variantes `neutral` / `success` / `warning` / `danger` / `info`        | `src/components/ui/Badge.jsx`      | ✅                             |
+| `Card`       | Contenedor para listados y resúmenes; la prop `as` define la etiqueta HTML (p. ej. `li`)      | `src/components/ui/Card.jsx`       | ✅ usado en `AdminTecnicos`    |
+| `Spinner`    | Indicador de carga accesible (texto para lectores de pantalla)                                | `src/components/ui/Spinner.jsx`    | ✅                             |
+| `EmptyState` | Mensaje cuando no hay datos, con descripción y acción opcionales                              | `src/components/ui/EmptyState.jsx` | ✅ usado en `AdminTecnicos`    |
+| `Modal`      | Confirmaciones con `<dialog>` nativo: cierra con Escape o clic en el fondo y mantiene el foco | `src/components/ui/Modal.jsx`      | ✅ usado al rechazar técnicos  |
+| `AuthCard`   | Contenedor de las pantallas de login, registro y cuenta en revisión                           | `src/components/AuthCard.jsx`      | 🟡 específico de autenticación |
+| `Tabs`       | Pestañas con contador; hoy está dentro de `AdminTecnicos`, a extraer cuando se reutilice      | —                                  | ⬜                             |
 
 ## 3. Autenticación
 
