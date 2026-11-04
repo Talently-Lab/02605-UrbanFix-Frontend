@@ -15,27 +15,27 @@ Hay tres roles: **cliente**, **técnico** y **administrador**. Cada usuario tien
 
 ## 2. Rutas públicas
 
-| Ruta | Pantalla | Propósito | Estado |
-|---|---|---|---|
-| `/` | Inicio | Presentación de UrbanFix y accesos a registrarse o iniciar sesión | ✅ placeholder |
-| `/login` | Iniciar sesión | Email y contraseña, igual para los tres roles | ✅ |
-| `/registro` | Crear cuenta | Registro como cliente o técnico. **No existe registro de Admin** | ✅ |
-| `/cuenta-en-revision` | Cuenta en revisión | Única pantalla que ve un técnico pendiente de aprobación o rechazado | ✅ |
-| `*` | Página no encontrada | Cualquier ruta inexistente | ✅ |
+| Ruta                  | Pantalla             | Propósito                                                            | Estado         |
+| --------------------- | -------------------- | -------------------------------------------------------------------- | -------------- |
+| `/`                   | Inicio               | Presentación de UrbanFix y accesos a registrarse o iniciar sesión    | ✅ placeholder |
+| `/login`              | Iniciar sesión       | Email y contraseña, igual para los tres roles                        | ✅             |
+| `/registro`           | Crear cuenta         | Registro como cliente o técnico. **No existe registro de Admin**     | ✅             |
+| `/cuenta-en-revision` | Cuenta en revisión   | Única pantalla que ve un técnico pendiente de aprobación o rechazado | ✅             |
+| `*`                   | Página no encontrada | Cualquier ruta inexistente                                           | ✅             |
 
 ## 3. Rutas privadas
 
-| Ruta | Pantalla | Cliente | Técnico | Admin | Propósito | Estado |
-|---|---|:-:|:-:|:-:|---|---|
-| `/panel` | Panel | ✔ | ✔ | ✔ | Pantalla de inicio después del login; el contenido cambia según el rol | ✅ placeholder |
-| `/perfil` | Mi perfil | ✔ | ✔ | ✔ | Ver y editar los datos propios | ✅ placeholder |
-| `/solicitudes` | Solicitudes | ✔ | ✔ | | Cliente: sus solicitudes. Técnico: las solicitudes que recibió | ✅ placeholder |
-| `/solicitudes/nueva` | Nueva solicitud | ✔ | | | Crear una solicitud y elegir un técnico disponible | ✅ placeholder |
-| `/solicitudes/:id` | Detalle de solicitud | ✔ | ✔ | | Ver una solicitud, su estado y las acciones posibles (aceptar, rechazar, cancelar, finalizar) | ✅ placeholder |
-| `/admin` | Administración | | | ✔ | Resumen del panel admin | ✅ placeholder |
-| `/admin/tecnicos` | Aprobación de técnicos | | | ✔ | Listado de técnicos pendientes para aprobar o rechazar; desactivar técnicos | ✅ aprobar/rechazar · 🆕 desactivar |
-| `/admin/usuarios` | Usuarios | | | ✔ | Listado de usuarios por rol | 🆕 |
-| `/admin/solicitudes` | Solicitudes (admin) | | | ✔ | Listado general de todas las solicitudes | 🆕 |
+| Ruta                 | Pantalla               | Cliente | Técnico | Admin | Propósito                                                                                     | Estado                              |
+| -------------------- | ---------------------- | :-----: | :-----: | :---: | --------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `/panel`             | Panel                  |    ✔    |    ✔    |   ✔   | Pantalla de inicio después del login; el contenido cambia según el rol                        | ✅ placeholder                      |
+| `/perfil`            | Mi perfil              |    ✔    |    ✔    |   ✔   | Ver y editar los datos propios                                                                | ✅ placeholder                      |
+| `/solicitudes`       | Solicitudes            |    ✔    |    ✔    |       | Cliente: sus solicitudes. Técnico: las solicitudes que recibió                                | ✅ placeholder                      |
+| `/solicitudes/nueva` | Nueva solicitud        |    ✔    |         |       | Crear una solicitud y elegir un técnico disponible                                            | ✅ placeholder                      |
+| `/solicitudes/:id`   | Detalle de solicitud   |    ✔    |    ✔    |       | Ver una solicitud, su estado y las acciones posibles (aceptar, rechazar, cancelar, finalizar) | ✅ placeholder                      |
+| `/admin`             | Administración         |         |         |   ✔   | Resumen del panel admin                                                                       | ✅ placeholder                      |
+| `/admin/tecnicos`    | Aprobación de técnicos |         |         |   ✔   | Listado de técnicos pendientes para aprobar o rechazar; desactivar técnicos                   | ✅ aprobar/rechazar · 🆕 desactivar |
+| `/admin/usuarios`    | Usuarios               |         |         |   ✔   | Listado de usuarios por rol                                                                   | 🆕                                  |
+| `/admin/solicitudes` | Solicitudes (admin)    |         |         |   ✔   | Listado general de todas las solicitudes                                                      | 🆕                                  |
 
 ## 4. Reglas de acceso y redirecciones
 

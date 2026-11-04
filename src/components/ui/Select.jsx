@@ -1,10 +1,17 @@
-export default function Select({ label, name, error, options, placeholder = 'Seleccioná una opción', className = '', ...props }) {
+import FormField from './FormField.jsx'
+
+export default function Select({
+  label,
+  name,
+  error,
+  options,
+  placeholder = 'Seleccioná una opción',
+  className = '',
+  ...props
+}) {
   const errorId = `${name}-error`
   return (
-    <div className={className}>
-      <label htmlFor={name} className="mb-1 block text-sm font-medium text-slate-700">
-        {label}
-      </label>
+    <FormField label={label} name={name} error={error} errorId={errorId} className={className}>
       <select
         id={name}
         name={name}
@@ -22,11 +29,6 @@ export default function Select({ label, name, error, options, placeholder = 'Sel
           </option>
         ))}
       </select>
-      {error && (
-        <p id={errorId} className="mt-1 text-sm text-red-600">
-          {error}
-        </p>
-      )}
-    </div>
+    </FormField>
   )
 }

@@ -20,23 +20,23 @@ npm run dev
 
 La app queda en http://localhost:5173.
 
-| Script | Qué hace |
-|---|---|
-| `npm run dev` | Servidor de desarrollo |
-| `npm run build` | Build de producción en `dist/` |
-| `npm run preview` | Sirve el build localmente |
-| `npm run lint` | Linter (oxlint) |
+| Script            | Qué hace                       |
+| ----------------- | ------------------------------ |
+| `npm run dev`     | Servidor de desarrollo         |
+| `npm run build`   | Build de producción en `dist/` |
+| `npm run preview` | Sirve el build localmente      |
+| `npm run lint`    | Linter (oxlint)                |
 
 ## Rutas
 
-| Ruta | Acceso |
-|---|---|
-| `/`, `/login`, `/registro` | Público |
-| `/cuenta-en-revision` | Técnico pendiente de aprobación o rechazado |
-| `/panel`, `/perfil` | Cualquier usuario autenticado |
-| `/solicitudes`, `/solicitudes/:id` | Cliente y técnico |
-| `/solicitudes/nueva` | Cliente |
-| `/admin`, `/admin/tecnicos` | Administrador |
+| Ruta                               | Acceso                                      |
+| ---------------------------------- | ------------------------------------------- |
+| `/`, `/login`, `/registro`         | Público                                     |
+| `/cuenta-en-revision`              | Técnico pendiente de aprobación o rechazado |
+| `/panel`, `/perfil`                | Cualquier usuario autenticado               |
+| `/solicitudes`, `/solicitudes/:id` | Cliente y técnico                           |
+| `/solicitudes/nueva`               | Cliente                                     |
+| `/admin`, `/admin/tecnicos`        | Administrador                               |
 
 Las rutas y sus permisos se definen en `src/router/index.jsx`; los roles, en `src/router/roles.js`.
 

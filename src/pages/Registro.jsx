@@ -96,7 +96,14 @@ export default function Registro() {
           {errors.role && <p className="mt-1 text-sm text-red-600">{errors.role}</p>}
         </fieldset>
 
-        <Input label="Nombre y apellido" name="name" autoComplete="name" value={values.name} onChange={handleChange} error={errors.name} />
+        <Input
+          label="Nombre y apellido"
+          name="name"
+          autoComplete="name"
+          value={values.name}
+          onChange={handleChange}
+          error={errors.name}
+        />
         <Input
           label="Email"
           name="email"
@@ -147,9 +154,7 @@ export default function Registro() {
           error={errors.confirmPassword}
         />
 
-        {isTecnico && (
-          <Alert variant="info">Tu cuenta quedará pendiente hasta que un administrador la apruebe.</Alert>
-        )}
+        {isTecnico && <Alert variant="info">Tu cuenta quedará pendiente hasta que un administrador la apruebe.</Alert>}
 
         <Button type="submit" className="w-full">
           Crear cuenta

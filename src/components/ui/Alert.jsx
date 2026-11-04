@@ -6,7 +6,10 @@ const VARIANTS = {
 
 export default function Alert({ variant = 'info', children }) {
   return (
-    <div role={variant === 'error' ? 'alert' : 'status'} className={`rounded-md border px-4 py-3 text-sm ${VARIANTS[variant]}`}>
+    <div
+      role={variant === 'error' ? 'alert' : 'status'}
+      className={`rounded-md border px-4 py-3 text-sm ${VARIANTS[variant]}`}
+    >
       {children}
     </div>
   )

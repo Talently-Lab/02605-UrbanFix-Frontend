@@ -25,7 +25,9 @@ export default function CuentaEnRevision() {
     <AuthCard title={rechazado ? 'Solicitud no aprobada' : 'Tu cuenta está en revisión'}>
       <div className="space-y-4">
         {rechazado ? (
-          <Alert variant="error">Tu cuenta de técnico no fue aprobada. Si creés que es un error, contactá al equipo de UrbanFix.</Alert>
+          <Alert variant="error">
+            Tu cuenta de técnico no fue aprobada. Si creés que es un error, contactá al equipo de UrbanFix.
+          </Alert>
         ) : (
           <Alert variant="info">
             Un administrador está revisando tus datos. Cuando tu cuenta sea aprobada vas a poder recibir solicitudes.

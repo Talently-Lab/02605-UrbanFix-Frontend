@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import Alert from '../../components/ui/Alert.jsx'
 import Button from '../../components/ui/Button.jsx'
+import Card from '../../components/ui/Card.jsx'
+import EmptyState from '../../components/ui/EmptyState.jsx'
+import Modal from '../../components/ui/Modal.jsx'
 import { getEspecialidadLabel } from '../../constants/especialidades.js'
 import { MENSAJES } from '../../constants/mensajes.js'
 import { ESTADOS_TECNICO } from '../../router/roles.js'
@@ -22,6 +25,7 @@ export default function AdminTecnicos() {
   const [tecnicos, setTecnicos] = useState(listTecnicos)
   const [tab, setTab] = useState(ESTADOS_TECNICO.PENDIENTE)
   const [feedback, setFeedback] = useState(null)
+  const [tecnicoARechazar, setTecnicoARechazar] = useState(null)
 
   const handleEstado = (tecnico, estado) => {
     try {
@@ -32,6 +36,11 @@ export default function AdminTecnicos() {
     } catch (err) {
       setFeedback({ variant: 'error', text: err.message })
     }
+  }
+
+  const confirmarRechazo = () => {
+    handleEstado(tecnicoARechazar, ESTADOS_TECNICO.RECHAZADO)
+    setTecnicoARechazar(null)
   }
 
   const visibles = tecnicos.filter((t) => t.estado === tab)
@@ -72,15 +81,14 @@ export default function AdminTecnicos() {
       )}
 
       {visibles.length === 0 ? (
-        <p className="mt-6 rounded-md border border-dashed border-slate-300 p-6 text-center text-sm text-slate-500">
-          {EMPTY_MESSAGES[tab]}
-        </p>
+        <EmptyState className="mt-6" title={EMPTY_MESSAGES[tab]} />
       ) : (
         <ul className="mt-4 space-y-3">
           {visibles.map((tecnico) => (
-            <li
+            <Card
+              as="li"
               key={tecnico.id}
-              className="flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-4 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="text-sm">
                 <p className="font-semibold text-slate-800">{tecnico.name}</p>
@@ -92,15 +100,32 @@ export default function AdminTecnicos() {
               {tab === ESTADOS_TECNICO.PENDIENTE && (
                 <div className="flex gap-2">
                   <Button onClick={() => handleEstado(tecnico, ESTADOS_TECNICO.APROBADO)}>Aprobar</Button>
-                  <Button variant="danger" onClick={() => handleEstado(tecnico, ESTADOS_TECNICO.RECHAZADO)}>
+                  <Button variant="danger" onClick={() => setTecnicoARechazar(tecnico)}>
                     Rechazar
                   </Button>
                 </div>
               )}
-            </li>
+            </Card>
           ))}
         </ul>
       )}
+      <Modal
+        open={tecnicoARechazar !== null}
+        title="Rechazar técnico"
+        onClose={() => setTecnicoARechazar(null)}
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setTecnicoARechazar(null)}>
+              Cancelar
+            </Button>
+            <Button variant="danger" onClick={confirmarRechazo}>
+              Rechazar
+            </Button>
+          </>
+        }
+      >
+        ¿Seguro que querés rechazar a {tecnicoARechazar?.name}? No va a poder recibir solicitudes.
+      </Modal>
     </section>
   )
 }

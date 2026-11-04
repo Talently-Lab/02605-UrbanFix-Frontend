@@ -1,8 +1,18 @@
 import { useState } from 'react'
+import FormField from './FormField.jsx'
 
 function EyeIcon({ open }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-5 w-5"
+      aria-hidden="true"
+    >
       <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
       <circle cx="12" cy="12" r="3" />
       {!open && <path d="M3 3l18 18" />}
@@ -16,10 +26,7 @@ export default function Input({ label, name, error, type = 'text', className = '
   const isPassword = type === 'password'
 
   return (
-    <div className={className}>
-      <label htmlFor={name} className="mb-1 block text-sm font-medium text-slate-700">
-        {label}
-      </label>
+    <FormField label={label} name={name} error={error} errorId={errorId} className={className}>
       <div className="relative">
         <input
           id={name}
@@ -44,11 +51,6 @@ export default function Input({ label, name, error, type = 'text', className = '
           </button>
         )}
       </div>
-      {error && (
-        <p id={errorId} className="mt-1 text-sm text-red-600">
-          {error}
-        </p>
-      )}
-    </div>
+    </FormField>
   )
 }
