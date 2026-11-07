@@ -33,23 +33,27 @@ export default function Registro() {
   const [values, setValues] = useState(INITIAL_VALUES)
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   const handleChange = (e) => setValues({ ...values, [e.target.name]: e.target.value })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setFormError('')
     const validation = validarRegistro(values)
     setErrors(validation)
     if (Object.keys(validation).length > 0) return
 
+    setSubmitting(true)
     try {
-      register(values)
+      await register(values)
       guardarCredenciales(values)
       // El técnico queda pendiente de aprobación: ProtectedRoute lo lleva a /cuenta-en-revision.
       navigate('/panel', { replace: true })
     } catch (err) {
       setFormError(err.message)
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -156,7 +160,7 @@ export default function Registro() {
 
         {isTecnico && <Alert variant="info">Tu cuenta quedará pendiente hasta que un administrador la apruebe.</Alert>}
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" loading={submitting}>
           Crear cuenta
         </Button>
       </form>

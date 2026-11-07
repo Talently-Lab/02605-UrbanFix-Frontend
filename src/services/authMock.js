@@ -30,7 +30,17 @@ function saveUsers(users) {
 const withoutPassword = ({ password: _password, ...user }) => user
 const normalizeEmail = (email) => email.trim().toLowerCase()
 
-export function registerUser({ role, name, email, password, especialidad, zona }) {
+// Simula la demora de la red para que la interfaz maneje el estado de carga.
+const DELAY_MS = 600
+const wait = () => new Promise((resolve) => setTimeout(resolve, DELAY_MS))
+
+// Token simulado. El backend real devolverá un JWT firmado.
+const TOKEN_PREFIX = 'mock-token.'
+const createToken = (userId) => `${TOKEN_PREFIX}${userId}`
+const getUserIdFromToken = (token) => (token?.startsWith(TOKEN_PREFIX) ? token.slice(TOKEN_PREFIX.length) : null)
+
+export async function registerUser({ role, name, email, password, especialidad, zona }) {
+  await wait()
   // Igual que deberá hacer el backend: nunca aceptar "admin" desde el registro.
   if (!ROLES_REGISTRO.includes(role)) throw new Error(MENSAJES.rolInvalido)
 
@@ -48,18 +58,22 @@ export function registerUser({ role, name, email, password, especialidad, zona }
     ...(role === ROLES.TECNICO && { especialidad, zona: zona.trim(), estado: ESTADOS_TECNICO.PENDIENTE }),
   }
   saveUsers([...users, user])
-  return withoutPassword(user)
+  return { token: createToken(user.id), user: withoutPassword(user) }
 }
 
-export function loginUser(email, password) {
+export async function loginUser(email, password) {
+  await wait()
   const user = readUsers().find((u) => u.email === normalizeEmail(email) && u.password === password)
   if (!user) throw new Error(MENSAJES.credencialesInvalidas)
-  return withoutPassword(user)
+  return { token: createToken(user.id), user: withoutPassword(user) }
 }
 
-export function getUserById(id) {
-  const user = readUsers().find((u) => u.id === id)
-  return user ? withoutPassword(user) : null
+// Simula GET /auth/me: devuelve el usuario dueño del token, o un error si el token no es válido.
+export async function getCurrentUser(token) {
+  await wait()
+  const user = readUsers().find((u) => u.id === getUserIdFromToken(token))
+  if (!user) throw new Error(MENSAJES.sesionInvalida)
+  return withoutPassword(user)
 }
 
 export function listTecnicos() {
