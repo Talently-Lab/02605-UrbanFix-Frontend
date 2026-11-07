@@ -17,23 +17,27 @@ export default function Login() {
   const [values, setValues] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
   const handleChange = (e) => setValues({ ...values, [e.target.name]: e.target.value })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setFormError('')
     const validation = validarLogin(values)
     setErrors(validation)
     if (Object.keys(validation).length > 0) return
 
+    setSubmitting(true)
     try {
-      const user = login(values.email, values.password)
+      const user = await login(values.email, values.password)
       guardarCredenciales({ email: values.email, password: values.password, name: user.name })
       // Si es un técnico sin aprobar, ProtectedRoute lo redirige a /cuenta-en-revision.
       navigate(from, { replace: true })
     } catch (err) {
       setFormError(err.message)
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -69,7 +73,7 @@ export default function Login() {
           onChange={handleChange}
           error={errors.password}
         />
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" loading={submitting}>
           Ingresar
         </Button>
       </form>

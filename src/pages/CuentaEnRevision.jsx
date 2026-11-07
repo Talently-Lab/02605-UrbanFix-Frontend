@@ -2,14 +2,23 @@ import { Navigate, useNavigate } from 'react-router'
 import AuthCard from '../components/AuthCard.jsx'
 import Alert from '../components/ui/Alert.jsx'
 import Button from '../components/ui/Button.jsx'
+import Spinner from '../components/ui/Spinner.jsx'
 import { getEspecialidadLabel } from '../constants/especialidades.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import { ESTADOS_TECNICO, necesitaAprobacion } from '../router/roles.js'
 
 // Única pantalla accesible para un técnico que todavía no fue aprobado (definición 2A).
 export default function CuentaEnRevision() {
-  const { user, logout } = useAuth()
+  const { user, loading, logout } = useAuth()
   const navigate = useNavigate()
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-slate-500">
+        <Spinner className="h-8 w-8" label="Cargando sesión" />
+      </div>
+    )
+  }
 
   if (!user) return <Navigate to="/login" replace />
   if (!necesitaAprobacion(user)) return <Navigate to="/panel" replace />
