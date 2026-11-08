@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router'
 import AppLayout from '../layouts/AppLayout.jsx'
+import AuthLayout from '../layouts/AuthLayout.jsx'
 import PublicLayout from '../layouts/PublicLayout.jsx'
 import Admin from '../pages/Admin.jsx'
 import AdminTecnicos from '../pages/admin/AdminTecnicos.jsx'
@@ -21,10 +22,15 @@ export const router = createBrowserRouter([
     element: <PublicLayout />,
     children: [
       { path: '/', element: <Home /> },
-      { path: '/login', element: <Login /> },
-      { path: '/registro', element: <Registro /> },
       // Requiere sesión, pero solo para técnicos sin aprobar: la propia página redirige al resto.
       { path: '/cuenta-en-revision', element: <CuentaEnRevision /> },
+    ],
+  },
+  {
+    element: <AuthLayout />,
+    children: [
+      { path: '/login', element: <Login /> },
+      { path: '/registro', element: <Registro /> },
     ],
   },
   {

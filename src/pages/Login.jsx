@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
-import AuthCard from '../components/AuthCard.jsx'
 import Alert from '../components/ui/Alert.jsx'
 import Button from '../components/ui/Button.jsx'
 import Input from '../components/ui/Input.jsx'
@@ -42,24 +41,17 @@ export default function Login() {
   }
 
   return (
-    <AuthCard
-      title="Iniciar sesión"
-      footer={
-        <>
-          ¿No tenés cuenta?{' '}
-          <Link to="/registro" className="font-semibold text-primary underline hover:text-primary-hover">
-            Registrate
-          </Link>
-        </>
-      }
-    >
-      <form onSubmit={handleSubmit} noValidate className="space-y-4">
+    <>
+      <h1 className="text-h4 font-bold text-ink">Ingresá a tu cuenta</h1>
+
+      <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
         {formError && <Alert variant="error">{formError}</Alert>}
         <Input
           label="Email"
           name="email"
           type="email"
           autoComplete="email"
+          placeholder="nombre@email.com"
           value={values.email}
           onChange={handleChange}
           error={errors.email}
@@ -77,6 +69,13 @@ export default function Login() {
           Ingresar
         </Button>
       </form>
-    </AuthCard>
+
+      <p className="mt-6 text-body-sm text-ink-muted">
+        ¿Todavía no tenés cuenta?{' '}
+        <Link to="/registro" className="font-semibold text-ink underline hover:text-primary">
+          Creá tu cuenta
+        </Link>
+      </p>
+    </>
   )
 }
