@@ -1,8 +1,111 @@
 @import 'tailwindcss';
 
-/* Design tokens de UrbanFix. Fuente oficial: Figma (Design System). */
+/*
+ * Design tokens de UrbanFix. Fuente oficial: Figma (Variables y Estilos de texto).
+ * Los espaciados del Figma (Space 1 = 4px … 50 = 200px) coinciden con la escala de Tailwind: p-4 = 16px.
+ */
+
+/* Primitivos: la paleta cruda. No generan clases; solo los usan los tokens semánticos. */
+:root {
+  --azul-50: #e3eaf5;
+  --azul-300: #8fb3e6;
+  --azul-400: #6e9cde;
+  --azul-600: #203353;
+  --azul-700: #1b3b6f;
+  --azul-800: #142c54;
+  --azul-900: #0e2245;
+
+  --naranja-200: #f2ae6b;
+  --naranja-300: #e99a4d;
+  --naranja-500: #f06a1c;
+  --naranja-700: #d95700;
+  --naranja-900: #ab4a00;
+
+  --celeste-100: #e1edf9;
+  --celeste-400: #6fa8e0;
+  --celeste-700: #2563a8;
+  --celeste-900: #1e324a;
+
+  --ambar-100: #fbf0d9;
+  --ambar-400: #e0b23d;
+  --ambar-700: #b37b00;
+  --ambar-900: #3a2f12;
+
+  --verde-100: #e4f3e9;
+  --verde-400: #4fbe85;
+  --verde-700: #1f7a4d;
+  --verde-900: #1d3a2b;
+
+  --rojo-100: #fbe4e1;
+  --rojo-400: #e2746b;
+  --rojo-700: #b3261e;
+  --rojo-900: #3d201d;
+
+  --gris-0: #ffffff;
+  --gris-50: #f7f5f2;
+  --gris-100: #edeff2;
+  --gris-150: #ece7e0;
+  --gris-200: #e7e5e2;
+  --gris-300: #d9d3c8;
+  --gris-400: #b7afa0;
+  --gris-500: #9aa3af;
+  --gris-600: #5b6470;
+  --gris-650: #4a535f;
+  --gris-700: #343b44;
+  --gris-750: #2b2f35;
+  --gris-800: #262c34;
+  --gris-850: #1c2127;
+  --gris-900: #1a1e23;
+  --gris-950: #14181d;
+}
+
+/* Semánticos: los que usan los componentes. Cada uno genera clases (bg-primary, text-ink, border-border…). */
+@theme inline {
+  /* Surface */
+  --color-surface-50: var(--gris-50);
+  --color-surface-100: var(--gris-0);
+  --color-surface-200: var(--gris-150);
+  --color-surface-dark: var(--gris-950);
+
+  /* Border */
+  --color-border: var(--gris-300);
+  --color-border-strong: var(--gris-400);
+
+  /* Text */
+  --color-ink: var(--gris-900);
+  --color-ink-muted: var(--gris-600);
+  --color-sobre-oscuro: var(--gris-0);
+  --color-sobre-oscuro-2: var(--azul-50);
+
+  /* Components */
+  --color-primary: var(--azul-700);
+  --color-primary-hover: var(--azul-800);
+  --color-primary-subtle: var(--azul-50);
+  --color-accent: var(--naranja-700);
+  --color-accent-hover: var(--naranja-900);
+  --color-brand-orange: var(--naranja-500);
+  --color-brand-night: var(--azul-900);
+
+  /* Feedback */
+  --color-success: var(--verde-700);
+  --color-success-subtle: var(--verde-100);
+  --color-warning: var(--ambar-700);
+  --color-warning-subtle: var(--ambar-100);
+  --color-danger: var(--rojo-700);
+  --color-danger-subtle: var(--rojo-100);
+  --color-info: var(--celeste-700);
+  --color-info-subtle: var(--celeste-100);
+  --color-neutral: var(--gris-600);
+  --color-neutral-subtle: var(--gris-200);
+}
+
 @theme {
   --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+
+  /* Radios (Corner-radius). Pill = rounded-full, que Tailwind ya trae. */
+  --radius-sm: 0.5rem; /* 8px */
+  --radius-md: 0.75rem; /* 12px */
+  --radius-lg: 1rem; /* 16px */
 
   /* Escala tipográfica (tamaño / interlineado). Equivalencia: 1rem = 16px. */
   --text-h1: 4rem; /* 64px */
@@ -28,4 +131,11 @@
   --text-input--line-height: 1.4375rem; /* 23px */
   --text-caption: 0.75rem; /* 12px */
   --text-caption--line-height: 1rem; /* 16px */
+}
+
+/* Estilos base de la página. */
+@layer base {
+  body {
+    @apply bg-surface-50 text-body text-ink;
+  }
 }
