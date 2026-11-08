@@ -61,6 +61,9 @@
 
 /* Semánticos: los que usan los componentes. Cada uno genera clases (bg-primary, text-ink, border-border…). */
 @theme inline {
+  /* Sin la paleta por defecto de Tailwind: solo existen los colores del design system. */
+  --color-*: initial;
+
   /* Surface */
   --color-surface-50: var(--gris-50);
   --color-surface-100: var(--gris-0);

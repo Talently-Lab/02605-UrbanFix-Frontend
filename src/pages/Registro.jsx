@@ -65,7 +65,7 @@ export default function Registro() {
       footer={
         <>
           ¿Ya tenés cuenta?{' '}
-          <Link to="/login" className="font-medium text-emerald-600 hover:underline">
+          <Link to="/login" className="font-semibold text-primary underline hover:text-primary-hover">
             Iniciá sesión
           </Link>
         </>
@@ -75,13 +75,13 @@ export default function Registro() {
         {formError && <Alert variant="error">{formError}</Alert>}
 
         <fieldset>
-          <legend className="mb-2 text-sm font-medium text-slate-700">¿Cómo vas a usar UrbanFix?</legend>
+          <legend className="mb-2 text-label font-semibold text-ink">¿Cómo vas a usar UrbanFix?</legend>
           <div className="grid gap-3 sm:grid-cols-2">
             {ROLE_OPTIONS.map(({ value, title, description }) => (
               <label
                 key={value}
-                className={`cursor-pointer rounded-md border p-3 text-sm ${
-                  values.role === value ? 'border-emerald-600 bg-emerald-50' : 'border-slate-300 hover:bg-slate-50'
+                className={`cursor-pointer rounded-sm border p-3 text-body-sm ${
+                  values.role === value ? 'border-primary bg-primary-subtle' : 'border-border hover:bg-surface-200'
                 }`}
               >
                 <input
@@ -92,12 +92,12 @@ export default function Registro() {
                   onChange={handleChange}
                   className="sr-only"
                 />
-                <span className="block font-semibold text-slate-800">{title}</span>
-                <span className="text-slate-500">{description}</span>
+                <span className="block font-semibold text-ink">{title}</span>
+                <span className="text-ink-muted">{description}</span>
               </label>
             ))}
           </div>
-          {errors.role && <p className="mt-1 text-sm text-red-600">{errors.role}</p>}
+          {errors.role && <p className="mt-1.5 text-body-sm text-danger">{errors.role}</p>}
         </fieldset>
 
         <Input

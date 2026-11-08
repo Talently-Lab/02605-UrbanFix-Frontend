@@ -11,7 +11,7 @@ export default function ProtectedRoute({ roles }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-slate-500">
+      <div className="flex min-h-screen items-center justify-center text-ink-muted">
         <Spinner className="h-8 w-8" label="Cargando sesión" />
       </div>
     )

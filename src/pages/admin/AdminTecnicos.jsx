@@ -48,12 +48,12 @@ export default function AdminTecnicos() {
 
   return (
     <section className="mx-auto max-w-4xl p-6">
-      <h1 className="text-2xl font-bold text-slate-800">Aprobación de técnicos</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <h1 className="text-h4 font-bold text-ink">Aprobación de técnicos</h1>
+      <p className="mt-1 text-body-sm text-ink-muted">
         Revisá los datos de cada técnico antes de aprobarlo. Solo los técnicos aprobados pueden recibir solicitudes.
       </p>
 
-      <div role="tablist" className="mt-6 flex gap-2 border-b border-slate-200">
+      <div role="tablist" className="mt-6 flex gap-2 border-b border-border">
         {TABS.map(({ estado, label }) => (
           <button
             key={estado}
@@ -63,10 +63,10 @@ export default function AdminTecnicos() {
               setTab(estado)
               setFeedback(null)
             }}
-            className={`-mb-px border-b-2 px-3 py-2 text-sm ${
+            className={`-mb-px border-b-2 px-3 py-2 text-body-sm ${
               tab === estado
-                ? 'border-emerald-600 font-semibold text-emerald-700'
-                : 'border-transparent text-slate-600 hover:text-slate-800'
+                ? 'border-primary font-semibold text-primary'
+                : 'border-transparent text-ink-muted hover:text-ink'
             }`}
           >
             {label} ({count(estado)})
@@ -90,10 +90,10 @@ export default function AdminTecnicos() {
               key={tecnico.id}
               className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
             >
-              <div className="text-sm">
-                <p className="font-semibold text-slate-800">{tecnico.name}</p>
-                <p className="text-slate-500">{tecnico.email}</p>
-                <p className="mt-1 text-slate-600">
+              <div className="text-body-sm">
+                <p className="font-semibold text-ink">{tecnico.name}</p>
+                <p className="text-ink-muted">{tecnico.email}</p>
+                <p className="mt-1 text-ink-muted">
                   {getEspecialidadLabel(tecnico.especialidad)} · {tecnico.zona}
                 </p>
               </div>

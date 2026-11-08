@@ -14,7 +14,7 @@ export default function CuentaEnRevision() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-slate-500">
+      <div className="flex min-h-screen items-center justify-center text-ink-muted">
         <Spinner className="h-8 w-8" label="Cargando sesión" />
       </div>
     )
@@ -42,7 +42,7 @@ export default function CuentaEnRevision() {
             Un administrador está revisando tus datos. Cuando tu cuenta sea aprobada vas a poder recibir solicitudes.
           </Alert>
         )}
-        <dl className="space-y-1 text-sm text-slate-600">
+        <dl className="space-y-1 text-body-sm text-ink-muted">
           <div>
             <dt className="inline font-medium">Nombre: </dt>
             <dd className="inline">{user.name}</dd>
