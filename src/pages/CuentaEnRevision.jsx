@@ -1,5 +1,4 @@
 import { Navigate, useNavigate } from 'react-router'
-import AuthCard from '../components/AuthCard.jsx'
 import Alert from '../components/ui/Alert.jsx'
 import Button from '../components/ui/Button.jsx'
 import Spinner from '../components/ui/Spinner.jsx'
@@ -14,7 +13,7 @@ export default function CuentaEnRevision() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-ink-muted">
+      <div className="flex justify-center text-ink-muted">
         <Spinner className="h-8 w-8" label="Cargando sesión" />
       </div>
     )
@@ -31,8 +30,11 @@ export default function CuentaEnRevision() {
   }
 
   return (
-    <AuthCard title={rechazado ? 'Solicitud no aprobada' : 'Tu cuenta está en revisión'}>
-      <div className="space-y-4">
+    <>
+      <h1 className="text-h4 font-bold text-ink">
+        {rechazado ? 'Solicitud no aprobada' : 'Tu cuenta está en revisión'}
+      </h1>
+      <div className="mt-6 space-y-4">
         {rechazado ? (
           <Alert variant="error">
             Tu cuenta de técnico no fue aprobada. Si creés que es un error, contactá al equipo de UrbanFix.
@@ -64,6 +66,6 @@ export default function CuentaEnRevision() {
           Cerrar sesión
         </Button>
       </div>
-    </AuthCard>
+    </>
   )
 }

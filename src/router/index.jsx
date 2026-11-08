@@ -1,12 +1,10 @@
 import { createBrowserRouter } from 'react-router'
 import AppLayout from '../layouts/AppLayout.jsx'
 import AuthLayout from '../layouts/AuthLayout.jsx'
-import PublicLayout from '../layouts/PublicLayout.jsx'
 import Admin from '../pages/Admin.jsx'
 import AdminTecnicos from '../pages/admin/AdminTecnicos.jsx'
 import CuentaEnRevision from '../pages/CuentaEnRevision.jsx'
 import Dashboard from '../pages/Dashboard.jsx'
-import Home from '../pages/Home.jsx'
 import Login from '../pages/Login.jsx'
 import NotFound from '../pages/NotFound.jsx'
 import Perfil from '../pages/Perfil.jsx'
@@ -15,22 +13,18 @@ import NuevaSolicitud from '../pages/solicitudes/NuevaSolicitud.jsx'
 import SolicitudDetalle from '../pages/solicitudes/SolicitudDetalle.jsx'
 import Solicitudes from '../pages/solicitudes/Solicitudes.jsx'
 import ProtectedRoute from './ProtectedRoute.jsx'
+import RootRedirect from './RootRedirect.jsx'
 import { ROLES } from './roles.js'
 
 export const router = createBrowserRouter([
-  {
-    element: <PublicLayout />,
-    children: [
-      { path: '/', element: <Home /> },
-      // Requiere sesión, pero solo para técnicos sin aprobar: la propia página redirige al resto.
-      { path: '/cuenta-en-revision', element: <CuentaEnRevision /> },
-    ],
-  },
+  { path: '/', element: <RootRedirect /> },
   {
     element: <AuthLayout />,
     children: [
       { path: '/login', element: <Login /> },
       { path: '/registro', element: <Registro /> },
+      // Requiere sesión, pero solo para técnicos sin aprobar: la propia página redirige al resto.
+      { path: '/cuenta-en-revision', element: <CuentaEnRevision /> },
     ],
   },
   {

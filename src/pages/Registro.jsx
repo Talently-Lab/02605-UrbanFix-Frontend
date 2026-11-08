@@ -110,7 +110,7 @@ export default function Registro() {
         />
 
         {isTecnico && (
-          <>
+          <div className="grid gap-4 sm:grid-cols-2">
             <Select
               label="Especialidad"
               name="especialidad"
@@ -122,32 +122,34 @@ export default function Registro() {
             <Input
               label="Zona de trabajo"
               name="zona"
-              placeholder="Ej.: Palermo, CABA"
+              placeholder="Ej.: Palermo"
               value={values.zona}
               onChange={handleChange}
               error={errors.zona}
             />
-          </>
+          </div>
         )}
 
-        <Input
-          label="Contraseña"
-          name="password"
-          type="password"
-          autoComplete="new-password"
-          value={values.password}
-          onChange={handleChange}
-          error={errors.password}
-        />
-        <Input
-          label="Repetir contraseña"
-          name="confirmPassword"
-          type="password"
-          autoComplete="new-password"
-          value={values.confirmPassword}
-          onChange={handleChange}
-          error={errors.confirmPassword}
-        />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Input
+            label="Contraseña"
+            name="password"
+            type="password"
+            autoComplete="new-password"
+            value={values.password}
+            onChange={handleChange}
+            error={errors.password}
+          />
+          <Input
+            label="Repetir contraseña"
+            name="confirmPassword"
+            type="password"
+            autoComplete="new-password"
+            value={values.confirmPassword}
+            onChange={handleChange}
+            error={errors.confirmPassword}
+          />
+        </div>
 
         {isTecnico && <Alert variant="info">Tu cuenta quedará pendiente hasta que un administrador la apruebe.</Alert>}
 
