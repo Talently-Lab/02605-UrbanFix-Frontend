@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
-import AuthCard from '../components/AuthCard.jsx'
 import Alert from '../components/ui/Alert.jsx'
 import Button from '../components/ui/Button.jsx'
 import Input from '../components/ui/Input.jsx'
@@ -60,18 +59,10 @@ export default function Registro() {
   const isTecnico = values.role === ROLES.TECNICO
 
   return (
-    <AuthCard
-      title="Crear cuenta"
-      footer={
-        <>
-          ¿Ya tenés cuenta?{' '}
-          <Link to="/login" className="font-semibold text-primary underline hover:text-primary-hover">
-            Iniciá sesión
-          </Link>
-        </>
-      }
-    >
-      <form onSubmit={handleSubmit} noValidate className="space-y-4">
+    <>
+      <h1 className="text-h4 font-bold text-ink">Creá tu cuenta</h1>
+
+      <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
         {formError && <Alert variant="error">{formError}</Alert>}
 
         <fieldset>
@@ -164,6 +155,13 @@ export default function Registro() {
           Crear cuenta
         </Button>
       </form>
-    </AuthCard>
+
+      <p className="mt-6 text-body-sm text-ink-muted">
+        ¿Ya tenés cuenta?{' '}
+        <Link to="/login" className="font-semibold text-ink underline hover:text-primary">
+          Ingresá
+        </Link>
+      </p>
+    </>
   )
 }
