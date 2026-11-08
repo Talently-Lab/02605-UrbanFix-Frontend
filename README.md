@@ -46,6 +46,17 @@ Las rutas y sus permisos se definen en `src/router/index.jsx`; los roles, en `sr
 > - Admin de prueba (simula el seed del backend): `admin@urbanfix.com` / `admin1234`.
 > - Los textos de error están en `src/constants/mensajes.js` y son provisorios hasta tener los del Kit del cliente.
 
+## Design system
+
+Los estilos salen del Figma del equipo (Variables y Estilos de texto) y están definidos como design tokens en `src/index.css`:
+
+- **Colores:** primitivos (`--azul-700`, `--gris-300`…) y semánticos, que son los únicos que usan los componentes: `bg-primary`, `text-ink`, `text-ink-muted`, `border-border`, `bg-surface-50`, `bg-warning-subtle`, etc. La paleta por defecto de Tailwind está desactivada.
+- **Tipografía:** IBM Plex Sans, con las clases `text-h1` … `text-h5`, `text-body`, `text-body-sm`, `text-button`, `text-label`, `text-input` y `text-caption`.
+- **Radios:** `rounded-sm` (8px), `rounded-md` (12px), `rounded-lg` (16px) y `rounded-full`.
+- **Espaciados:** coinciden con la escala de Tailwind (`p-4` = 16px).
+
+El formato del código lo aplica Prettier (`npm run format`); conviene instalar la extensión recomendada de VS Code.
+
 ## Estructura
 
 ```

@@ -2,12 +2,12 @@
 export default function FormField({ label, name, error, errorId, className = '', children }) {
   return (
     <div className={className}>
-      <label htmlFor={name} className="mb-1 block text-sm font-medium text-slate-700">
+      <label htmlFor={name} className="mb-1.5 block text-label font-semibold text-ink">
         {label}
       </label>
       {children}
       {error && (
-        <p id={errorId} className="mt-1 text-sm text-red-600">
+        <p id={errorId} className="mt-1.5 text-body-sm text-danger">
           {error}
         </p>
       )}
