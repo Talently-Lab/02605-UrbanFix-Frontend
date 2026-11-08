@@ -1,3 +1,4 @@
+import { fieldClassName } from './fieldStyles.js'
 import FormField from './FormField.jsx'
 
 export default function Select({
@@ -17,9 +18,7 @@ export default function Select({
         name={name}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
-        className={`w-full rounded-md border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-500 ${
-          error ? 'border-red-500' : 'border-slate-300'
-        }`}
+        className={`${fieldClassName(error)} h-11`}
         {...props}
       >
         <option value="">{placeholder}</option>

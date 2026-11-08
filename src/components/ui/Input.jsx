@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { fieldClassName } from './fieldStyles.js'
 import FormField from './FormField.jsx'
 
 function EyeIcon({ open }) {
@@ -34,9 +35,7 @@ export default function Input({ label, name, error, type = 'text', className = '
           type={isPassword && showPassword ? 'text' : type}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
-          className={`w-full rounded-md border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-500 ${
-            isPassword ? 'pr-10' : ''
-          } ${error ? 'border-red-500' : 'border-slate-300'}`}
+          className={`${fieldClassName(error)} h-11 ${isPassword ? 'pr-10' : ''}`}
           {...props}
         />
         {isPassword && (
@@ -45,7 +44,7 @@ export default function Input({ label, name, error, type = 'text', className = '
             onClick={() => setShowPassword(!showPassword)}
             aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             aria-pressed={showPassword}
-            className="absolute inset-y-0 right-0 flex items-center px-3 text-slate-500 hover:text-slate-700"
+            className="absolute inset-y-0 right-0 flex items-center px-3 text-ink-muted hover:text-ink"
           >
             <EyeIcon open={!showPassword} />
           </button>
