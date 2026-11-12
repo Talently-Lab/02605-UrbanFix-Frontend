@@ -31,7 +31,8 @@ La app queda en http://localhost:5173.
 
 | Ruta                               | Acceso                                      |
 | ---------------------------------- | ------------------------------------------- |
-| `/`, `/login`, `/registro`         | Público                                     |
+| `/`                                | Redirige a `/login` o a `/panel`            |
+| `/login`, `/registro`              | Público                                     |
 | `/cuenta-en-revision`              | Técnico pendiente de aprobación o rechazado |
 | `/panel`, `/perfil`                | Cualquier usuario autenticado               |
 | `/solicitudes`, `/solicitudes/:id` | Cliente y técnico                           |

@@ -15,13 +15,13 @@ Hay tres roles: **cliente**, **técnico** y **administrador**. Cada usuario tien
 
 ## 2. Rutas públicas
 
-| Ruta                  | Pantalla             | Propósito                                                            | Estado         |
-| --------------------- | -------------------- | -------------------------------------------------------------------- | -------------- |
-| `/`                   | Inicio               | Presentación de UrbanFix y accesos a registrarse o iniciar sesión    | ✅ placeholder |
-| `/login`              | Iniciar sesión       | Email y contraseña, igual para los tres roles                        | ✅             |
-| `/registro`           | Crear cuenta         | Registro como cliente o técnico. **No existe registro de Admin**     | ✅             |
-| `/cuenta-en-revision` | Cuenta en revisión   | Única pantalla que ve un técnico pendiente de aprobación o rechazado | ✅             |
-| `*`                   | Página no encontrada | Cualquier ruta inexistente                                           | ✅             |
+| Ruta                  | Pantalla             | Propósito                                                                                                 | Estado |
+| --------------------- | -------------------- | --------------------------------------------------------------------------------------------------------- | ------ |
+| `/`                   | —                    | Sin página propia (el diseño arranca en el login): redirige a `/login` sin sesión o a `/panel` con sesión | ✅     |
+| `/login`              | Iniciar sesión       | Email y contraseña, igual para los tres roles                                                             | ✅     |
+| `/registro`           | Crear cuenta         | Registro como cliente o técnico. **No existe registro de Admin**                                          | ✅     |
+| `/cuenta-en-revision` | Cuenta en revisión   | Única pantalla que ve un técnico pendiente de aprobación o rechazado                                      | ✅     |
+| `*`                   | Página no encontrada | Cualquier ruta inexistente                                                                                | ✅     |
 
 ## 3. Rutas privadas
 
