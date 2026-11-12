@@ -14,7 +14,7 @@ Inventario de los componentes de interfaz del MVP (UF-W01-012). Basado en el alc
 
 | Sección                    | ✅  | 🟡  | ⬜  |
 | -------------------------- | :-: | :-: | :-: |
-| 1. Estructura y navegación |  5  |  0  |  1  |
+| 1. Estructura y navegación |  6  |  0  |  0  |
 | 2. UI base                 | 11  |  0  |  1  |
 | 3. Autenticación           |  4  |  0  |  0  |
 | 4. Solicitudes de servicio |  0  |  3  |  6  |
@@ -23,14 +23,14 @@ Inventario de los componentes de interfaz del MVP (UF-W01-012). Basado en el alc
 
 ## 1. Estructura y navegación
 
-| Componente          | Tipo     | Descripción                                                                              | Ubicación                       | Estado |
-| ------------------- | -------- | ---------------------------------------------------------------------------------------- | ------------------------------- | ------ |
-| `AuthLayout`        | Layout   | Login, registro y cuenta en revisión: panel de marca con foto y formulario (Figma Hi-fi) | `src/layouts/AuthLayout.jsx`    | ✅     |
-| `RootRedirect`      | Ruteo    | `/` lleva a `/login` o a `/panel` según la sesión                                        | `src/router/RootRedirect.jsx`   | ✅     |
-| `AppLayout`         | Layout   | Cabecera de la app autenticada con menú según rol y botón de salir                       | `src/layouts/AppLayout.jsx`     | ✅     |
-| `ProtectedRoute`    | Ruteo    | Bloquea rutas sin sesión, técnicos sin aprobar y roles sin permiso                       | `src/router/ProtectedRoute.jsx` | ✅     |
-| `NotFound`          | Pantalla | Página 404                                                                               | `src/pages/NotFound.jsx`        | ✅     |
-| `Navbar` responsive | Bloque   | Menú colapsable para celular (hamburguesa)                                               | —                               | ⬜     |
+| Componente       | Tipo     | Descripción                                                                              | Ubicación                       | Estado                         |
+| ---------------- | -------- | ---------------------------------------------------------------------------------------- | ------------------------------- | ------------------------------ |
+| `AuthLayout`     | Layout   | Login, registro y cuenta en revisión: panel de marca con foto y formulario (Figma Hi-fi) | `src/layouts/AuthLayout.jsx`    | ✅                             |
+| `RootRedirect`   | Ruteo    | `/` lleva a `/login` o a `/panel` según la sesión                                        | `src/router/RootRedirect.jsx`   | ✅                             |
+| `AppLayout`      | Layout   | App autenticada: `Sidebar` a la izquierda y cabecera con el usuario (lleva a `/perfil`)  | `src/layouts/AppLayout.jsx`     | ✅                             |
+| `Sidebar`        | Bloque   | Navbar del Figma: menú según rol con íconos Lucide; en celular se abre con ☰            | `src/components/Sidebar.jsx`    | ✅ técnico y admin provisorios |
+| `ProtectedRoute` | Ruteo    | Bloquea rutas sin sesión, técnicos sin aprobar y roles sin permiso                       | `src/router/ProtectedRoute.jsx` | ✅                             |
+| `NotFound`       | Pantalla | Página 404                                                                               | `src/pages/NotFound.jsx`        | ✅                             |
 
 ## 2. UI base (reutilizables)
 
