@@ -8,7 +8,6 @@ const ESTILOS = {
   [ESTADOS_SOLICITUD.ACEPTADA]: { label: 'Aceptada', fondo: 'bg-info-subtle', punto: 'bg-[var(--celeste-400)]' },
   [ESTADOS_SOLICITUD.EN_CURSO]: { label: 'En curso', fondo: 'bg-info-subtle', punto: 'bg-info' },
   [ESTADOS_SOLICITUD.COMPLETADA]: { label: 'Completada', fondo: 'bg-success-subtle', punto: 'bg-success' },
-  [ESTADOS_SOLICITUD.RECHAZADA]: { label: 'Rechazada', fondo: 'bg-neutral-subtle', punto: 'bg-neutral' },
   [ESTADOS_SOLICITUD.CANCELADA]: { label: 'Cancelada', fondo: 'bg-danger-subtle', punto: 'bg-danger' },
 }
 
