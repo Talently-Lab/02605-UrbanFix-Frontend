@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
-import { getCurrentUser, loginUser, registerUser } from '../services/authMock.js'
+import { MENSAJES } from '../constants/mensajes.js'
+import { ROLES } from '../router/roles.js'
+import { getMe, login as loginRequest, registerClient, registerTechnician } from '../services/authService.js'
 import { clearToken, getToken, saveToken } from '../services/tokenStorage.js'
 
 const AuthContext = createContext(null)
@@ -14,7 +16,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const savedToken = getToken()
     if (!savedToken) return
-    getCurrentUser(savedToken)
+    getMe()
       .then((currentUser) => {
         setToken(savedToken)
         setUser(currentUser)
@@ -23,16 +25,32 @@ export function AuthProvider({ children }) {
       .finally(() => setLoading(false))
   }, [])
 
-  const startSession = ({ token: newToken, user: newUser }) => {
-    saveToken(newToken)
-    setToken(newToken)
-    setUser(newUser)
-    return newUser
+  // La API devuelve solo el token: se guarda y después se piden los datos del usuario a /users/me.
+  const startSession = async ({ accessToken }) => {
+    saveToken(accessToken)
+    try {
+      const currentUser = await getMe()
+      setToken(accessToken)
+      setUser(currentUser)
+      return currentUser
+    } catch (error) {
+      clearToken()
+      throw error
+    }
   }
 
   // Lanzan Error con el mensaje para mostrar si las credenciales o los datos no son válidos.
-  const login = async (email, password) => startSession(await loginUser(email, password))
-  const register = async (data) => startSession(await registerUser(data))
+  const login = async (email, password) => startSession(await loginRequest(email, password))
+
+  // Cada rol tiene su ruta de registro, y solo se mandan los datos que le corresponden.
+  // El Admin no se registra: lo crea el sistema (definición 1A).
+  const register = async ({ role, name, email, password, especialidad, zona }) => {
+    if (role === ROLES.CLIENTE) return startSession(await registerClient({ name, email, password }))
+    if (role === ROLES.TECNICO) {
+      return startSession(await registerTechnician({ name, email, password, especialidad, zona }))
+    }
+    throw new Error(MENSAJES.rolInvalido)
+  }
 
   const logout = () => {
     clearToken()

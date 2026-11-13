@@ -9,6 +9,7 @@ export const MENSAJES = {
   emailEnUso: 'Ya existe una cuenta con este email.',
   credencialesInvalidas: 'Email o contraseña incorrectos.',
   sesionInvalida: 'Tu sesión expiró. Iniciá sesión de nuevo.',
+  errorInesperado: 'No pudimos completar la acción. Probá de nuevo en unos minutos.',
   estadoInvalido: 'El estado elegido no es válido.',
   tecnicoNoEncontrado: 'No se encontró el técnico.',
   tecnicoAprobado: (name) => `${name} fue aprobado y ya puede recibir solicitudes.`,
