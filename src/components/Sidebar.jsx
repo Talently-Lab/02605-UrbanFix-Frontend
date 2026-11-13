@@ -1,6 +1,7 @@
 import { CirclePlus, House, LayoutDashboard, List, LogOut, Users, X } from 'lucide-react'
-import { Link, NavLink } from 'react-router'
+import { NavLink } from 'react-router'
 import { ROLES } from '../router/roles.js'
+import Logo from './Logo.jsx'
 
 // `roles` indefinido = visible para todos los roles.
 // Solo el menú del cliente está en el Figma; técnico y admin quedan provisorios.
@@ -26,14 +27,7 @@ export default function Sidebar({ role, open, onClose, onLogout }) {
       }`}
     >
       <div className="flex items-center justify-between">
-        <Link
-          to="/panel"
-          onClick={onClose}
-          className="inline-flex items-center gap-2 px-3 py-2 text-body font-bold text-primary"
-        >
-          <span aria-hidden="true" className="h-6 w-6 rounded-sm bg-brand-orange" />
-          UrbanFix
-        </Link>
+        <Logo to="/panel" onClick={onClose} className="px-3 py-2" />
         <button
           type="button"
           onClick={onClose}
