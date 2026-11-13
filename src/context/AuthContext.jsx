@@ -1,40 +1,30 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { getCurrentUser, loginUser, registerUser } from '../services/authMock.js'
-
-// Guarda el token de sesión. Con el backend real será el JWT que devuelva la API.
-const TOKEN_KEY = 'urbanfix:token'
+import { clearToken, getToken, saveToken } from '../services/tokenStorage.js'
 
 const AuthContext = createContext(null)
-
-function readToken() {
-  try {
-    return localStorage.getItem(TOKEN_KEY)
-  } catch {
-    return null
-  }
-}
 
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(null)
   const [user, setUser] = useState(null)
   // Si hay un token guardado, arrancamos cargando hasta saber de quién es.
-  const [loading, setLoading] = useState(() => Boolean(readToken()))
+  const [loading, setLoading] = useState(() => Boolean(getToken()))
 
   // Al cargar la app, recupera la sesión guardada (si hay un token).
   useEffect(() => {
-    const savedToken = readToken()
+    const savedToken = getToken()
     if (!savedToken) return
     getCurrentUser(savedToken)
       .then((currentUser) => {
         setToken(savedToken)
         setUser(currentUser)
       })
-      .catch(() => localStorage.removeItem(TOKEN_KEY))
+      .catch(() => clearToken())
       .finally(() => setLoading(false))
   }, [])
 
   const startSession = ({ token: newToken, user: newUser }) => {
-    localStorage.setItem(TOKEN_KEY, newToken)
+    saveToken(newToken)
     setToken(newToken)
     setUser(newUser)
     return newUser
@@ -45,7 +35,7 @@ export function AuthProvider({ children }) {
   const register = async (data) => startSession(await registerUser(data))
 
   const logout = () => {
-    localStorage.removeItem(TOKEN_KEY)
+    clearToken()
     setToken(null)
     setUser(null)
   }

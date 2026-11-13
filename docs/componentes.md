@@ -93,14 +93,15 @@ Inventario de los componentes de interfaz del MVP (UF-W01-012). Basado en el alc
 
 ## 7. Soporte (no visuales)
 
-| Elemento                    | Descripción                                                                     | Ubicación                   | Estado                 |
-| --------------------------- | ------------------------------------------------------------------------------- | --------------------------- | ---------------------- |
-| Roles y estados del técnico | Constantes y regla `necesitaAprobacion`                                         | `src/router/roles.js`       | ✅                     |
-| Mensajes                    | Textos de error y confirmación, provisorios hasta tener los del Kit del cliente | `src/constants/mensajes.js` | 🟡 provisorio          |
-| Validaciones                | Reglas de los formularios de login y registro                                   | `src/utils/validaciones.js` | ✅                     |
-| Mock de autenticación       | Usuarios en `localStorage` mientras no hay backend                              | `src/services/authMock.js`  | 🟡 temporal            |
-| Cliente API                 | Llamadas al backend con token                                                   | `src/services/api.js`       | ⬜ depende del backend |
-| Variables de entorno        | `VITE_API_URL`                                                                  | `.env`                      | ⬜                     |
+| Elemento                    | Descripción                                                                       | Ubicación                      | Estado                  |
+| --------------------------- | --------------------------------------------------------------------------------- | ------------------------------ | ----------------------- |
+| Roles y estados del técnico | Constantes y regla `necesitaAprobacion`                                           | `src/router/roles.js`          | ✅                      |
+| Mensajes                    | Textos de error y confirmación, provisorios hasta tener los del Kit del cliente   | `src/constants/mensajes.js`    | 🟡 provisorio           |
+| Validaciones                | Reglas de los formularios de login y registro                                     | `src/utils/validaciones.js`    | ✅                      |
+| Mock de autenticación       | Usuarios en `localStorage` mientras no hay backend                                | `src/services/authMock.js`     | 🟡 temporal             |
+| Cliente API                 | Axios: manda el JWT en cada pedido y ante un 401 cierra la sesión y va a `/login` | `src/services/api.js`          | ✅ sin conectar todavía |
+| Token de sesión             | Guardar, leer y borrar el JWT (lo usan `AuthContext` y el cliente API)            | `src/services/tokenStorage.js` | ✅                      |
+| Variables de entorno        | `VITE_API_URL`: copiar `.env.example` como `.env` y completar                     | `.env.example`                 | ✅                      |
 
 ## Cómo mantener este inventario
 
