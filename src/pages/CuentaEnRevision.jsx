@@ -4,7 +4,7 @@ import Button from '../components/ui/Button.jsx'
 import Spinner from '../components/ui/Spinner.jsx'
 import { getEspecialidadLabel } from '../constants/especialidades.js'
 import { useAuth } from '../context/AuthContext.jsx'
-import { ESTADOS_TECNICO, necesitaAprobacion } from '../router/roles.js'
+import { ESTADOS_TECNICO, getApprovalStatus, necesitaAprobacion } from '../router/roles.js'
 
 // Única pantalla accesible para un técnico que todavía no fue aprobado (definición 2A).
 export default function CuentaEnRevision() {
@@ -22,7 +22,7 @@ export default function CuentaEnRevision() {
   if (!user) return <Navigate to="/login" replace />
   if (!necesitaAprobacion(user)) return <Navigate to="/panel" replace />
 
-  const rechazado = user.estado === ESTADOS_TECNICO.RECHAZADO
+  const rechazado = getApprovalStatus(user) === ESTADOS_TECNICO.RECHAZADO
 
   const handleLogout = () => {
     logout()

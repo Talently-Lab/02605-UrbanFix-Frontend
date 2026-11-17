@@ -4,7 +4,8 @@ import { getToken } from './tokenStorage.js'
 
 // Placeholder: "backend" simulado en localStorage hasta tener la API.
 // Las contraseñas se guardan en texto plano SOLO porque es un mock local.
-const USERS_KEY = 'urbanfix:users'
+// "v2": los usuarios guardados con los valores anteriores ('cliente', 'pendiente') quedan descartados.
+const USERS_KEY = 'urbanfix:users-v2'
 
 // Simula el seed del backend (definición 1A). El real lee la contraseña de variables de entorno.
 const ADMIN_SEED = {
@@ -59,7 +60,12 @@ async function createUser({ role, name, email, password, especialidad, zona }) {
     email: normalizedEmail,
     password,
     role,
-    ...(role === ROLES.TECNICO && { especialidad, zona: zona.trim(), estado: ESTADOS_TECNICO.PENDIENTE }),
+    // Especialidad y zona: dónde se cargan en la API está pendiente del contrato.
+    ...(role === ROLES.TECNICO && {
+      especialidad,
+      zona: zona.trim(),
+      technician: { approvalStatus: ESTADOS_TECNICO.PENDIENTE },
+    }),
   }
   saveUsers([...users, user])
   return createSession(user.id)
@@ -97,7 +103,7 @@ export function setEstadoTecnico(id, estado) {
   const users = readUsers()
   const tecnico = users.find((u) => u.id === id && u.role === ROLES.TECNICO)
   if (!tecnico) throw new Error(MENSAJES.tecnicoNoEncontrado)
-  tecnico.estado = estado
+  tecnico.technician = { ...tecnico.technician, approvalStatus: estado }
   saveUsers(users)
   return withoutPassword(tecnico)
 }
