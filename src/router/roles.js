@@ -1,7 +1,8 @@
+// Valores del contrato de la API (enum UserRole). Los textos para mostrar están en ROLE_LABELS.
 export const ROLES = {
-  CLIENTE: 'cliente',
-  TECNICO: 'tecnico',
-  ADMIN: 'admin',
+  CLIENTE: 'CLIENT',
+  TECNICO: 'TECHNICIAN',
+  ADMIN: 'ADMIN',
 }
 
 export const ROLE_LABELS = {
@@ -14,10 +15,15 @@ export const ROLE_LABELS = {
 export const ROLES_REGISTRO = [ROLES.CLIENTE, ROLES.TECNICO]
 
 // El técnico necesita aprobación del Admin antes de operar (definición 2A).
+// Valores del contrato de la API (enum TechnicianApprovalStatus).
 export const ESTADOS_TECNICO = {
-  PENDIENTE: 'pendiente',
-  APROBADO: 'aprobado',
-  RECHAZADO: 'rechazado',
+  PENDIENTE: 'PENDING',
+  APROBADO: 'APPROVED',
+  RECHAZADO: 'REJECTED',
 }
 
-export const necesitaAprobacion = (user) => user.role === ROLES.TECNICO && user.estado !== ESTADOS_TECNICO.APROBADO
+// En la API, el estado de aprobación viene dentro de `technician` (GET /usuarios/me).
+export const getApprovalStatus = (user) => user.technician?.approvalStatus
+
+export const necesitaAprobacion = (user) =>
+  user.role === ROLES.TECNICO && getApprovalStatus(user) !== ESTADOS_TECNICO.APROBADO

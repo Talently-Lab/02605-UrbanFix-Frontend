@@ -6,7 +6,7 @@ import EmptyState from '../../components/ui/EmptyState.jsx'
 import Modal from '../../components/ui/Modal.jsx'
 import { getEspecialidadLabel } from '../../constants/especialidades.js'
 import { MENSAJES } from '../../constants/mensajes.js'
-import { ESTADOS_TECNICO } from '../../router/roles.js'
+import { ESTADOS_TECNICO, getApprovalStatus } from '../../router/roles.js'
 import { listTecnicos, setEstadoTecnico } from '../../services/authMock.js'
 
 const TABS = [
@@ -43,8 +43,8 @@ export default function AdminTecnicos() {
     setTecnicoARechazar(null)
   }
 
-  const visibles = tecnicos.filter((t) => t.estado === tab)
-  const count = (estado) => tecnicos.filter((t) => t.estado === estado).length
+  const visibles = tecnicos.filter((t) => getApprovalStatus(t) === tab)
+  const count = (estado) => tecnicos.filter((t) => getApprovalStatus(t) === estado).length
 
   return (
     <section className="mx-auto max-w-4xl p-6">
