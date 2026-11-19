@@ -17,20 +17,20 @@ Inventario de los componentes de interfaz del MVP (UF-W01-012). Basado en el alc
 | 1. Estructura y navegación |  6  |  0  |  0  |
 | 2. UI base                 | 12  |  0  |  1  |
 | 3. Autenticación           |  4  |  0  |  0  |
-| 4. Solicitudes de servicio |  0  |  3  |  6  |
+| 4. Solicitudes de servicio |  1  |  3  |  5  |
 | 5. Panel y perfil          |  0  |  2  |  0  |
 | 6. Panel de administración |  1  |  1  |  3  |
 
 ## 1. Estructura y navegación
 
-| Componente       | Tipo     | Descripción                                                                              | Ubicación                       | Estado                         |
-| ---------------- | -------- | ---------------------------------------------------------------------------------------- | ------------------------------- | ------------------------------ |
-| `AuthLayout`     | Layout   | Login, registro y cuenta en revisión: panel de marca con foto y formulario (Figma Hi-fi) | `src/layouts/AuthLayout.jsx`    | ✅                             |
-| `RootRedirect`   | Ruteo    | `/` lleva a `/login` o a `/panel` según la sesión                                        | `src/router/RootRedirect.jsx`   | ✅                             |
-| `AppLayout`      | Layout   | App autenticada: `Sidebar` a la izquierda y cabecera con el usuario (lleva a `/perfil`)  | `src/layouts/AppLayout.jsx`     | ✅                             |
-| `Sidebar`        | Bloque   | Navbar del Figma: menú según rol con íconos Lucide; en celular se abre con ☰            | `src/components/Sidebar.jsx`    | ✅ técnico y admin provisorios |
-| `ProtectedRoute` | Ruteo    | Bloquea rutas sin sesión, técnicos sin aprobar y roles sin permiso                       | `src/router/ProtectedRoute.jsx` | ✅                             |
-| `NotFound`       | Pantalla | Página 404                                                                               | `src/pages/NotFound.jsx`        | ✅                             |
+| Componente       | Tipo     | Descripción                                                                                    | Ubicación                       | Estado                         |
+| ---------------- | -------- | ---------------------------------------------------------------------------------------------- | ------------------------------- | ------------------------------ |
+| `AuthLayout`     | Layout   | Login, registro y cuenta en revisión: panel de marca con logo, foto y formulario (Figma Hi-fi) | `src/layouts/AuthLayout.jsx`    | ✅                             |
+| `RootRedirect`   | Ruteo    | `/` lleva a `/login` o a `/panel` según la sesión                                              | `src/router/RootRedirect.jsx`   | ✅                             |
+| `AppLayout`      | Layout   | App autenticada: `Sidebar` a la izquierda y cabecera con el usuario (lleva a `/perfil`)        | `src/layouts/AppLayout.jsx`     | ✅                             |
+| `Sidebar`        | Bloque   | Navbar del Figma: menú según rol con íconos Lucide; en celular se abre con ☰                  | `src/components/Sidebar.jsx`    | ✅ técnico y admin provisorios |
+| `ProtectedRoute` | Ruteo    | Bloquea rutas sin sesión, técnicos sin aprobar y roles sin permiso                             | `src/router/ProtectedRoute.jsx` | ✅                             |
+| `NotFound`       | Pantalla | Página 404                                                                                     | `src/pages/NotFound.jsx`        | ✅                             |
 
 ## 2. UI base (reutilizables)
 
@@ -57,52 +57,53 @@ Inventario de los componentes de interfaz del MVP (UF-W01-012). Basado en el alc
 | `Login`            | Pantalla | Email y contraseña con validaciones; ofrece guardar la contraseña en el navegador   | `src/pages/Login.jsx`            | ✅ contra mock |
 | `Registro`         | Pantalla | Elección de rol cliente o técnico (sin Admin); el técnico carga especialidad y zona | `src/pages/Registro.jsx`         | ✅ contra mock |
 | `CuentaEnRevision` | Pantalla | Única pantalla para técnicos pendientes de aprobación o rechazados                  | `src/pages/CuentaEnRevision.jsx` | ✅             |
-| `AuthContext`      | Estado   | Sesión del usuario: login, registro y logout                                        | `src/context/AuthContext.jsx`    | ✅ simulado    |
+| `AuthContext`      | Estado   | Sesión: login en dos pasos (token → datos del usuario), registro por rol y logout   | `src/context/AuthContext.jsx`    | ✅ simulado    |
 
 ## 4. Solicitudes de servicio
 
-> Dependen de la definición de los estados de la solicitud, todavía pendiente de validar con el equipo.
+> Estados confirmados por Backend: Pendiente, Aceptada, En curso, Completada y Cancelada (D-014). Permisos por rol: D-025 a D-029 y D-031 a D-033. Los campos de la solicitud (RN-017) están pendientes.
 
-| Componente         | Tipo     | Rol               | Descripción                                                  | Ubicación                                    | Estado         |
-| ------------------ | -------- | ----------------- | ------------------------------------------------------------ | -------------------------------------------- | -------------- |
-| `Solicitudes`      | Pantalla | Cliente / Técnico | Cliente: sus solicitudes. Técnico: las que recibió           | `src/pages/solicitudes/Solicitudes.jsx`      | 🟡 placeholder |
-| `NuevaSolicitud`   | Pantalla | Cliente           | Crear una solicitud                                          | `src/pages/solicitudes/NuevaSolicitud.jsx`   | 🟡 placeholder |
-| `SolicitudDetalle` | Pantalla | Cliente / Técnico | Vista completa de una solicitud, su estado y acciones        | `src/pages/solicitudes/SolicitudDetalle.jsx` | 🟡 placeholder |
-| `SolicitudForm`    | Bloque   | Cliente           | Tipo de servicio, descripción, dirección y fecha             | —                                            | ⬜             |
-| `TecnicoSelector`  | Bloque   | Cliente           | Elegir técnico: solo aprobados y sin trabajo activo (4A, 4B) | —                                            | ⬜             |
-| `SolicitudCard`    | Bloque   | Cliente / Técnico | Resumen de una solicitud en el listado                       | —                                            | ⬜             |
-| `EstadoBadge`      | UI       | Todos             | Estado de la solicitud (usa `Badge`)                         | —                                            | ⬜             |
-| `AccionesTecnico`  | Bloque   | Técnico           | Aceptar / rechazar / finalizar                               | —                                            | ⬜             |
-| `AccionesCliente`  | Bloque   | Cliente           | Cancelar / elegir otro técnico                               | —                                            | ⬜             |
+| Componente         | Tipo     | Rol               | Descripción                                                      | Ubicación                                    | Estado         |
+| ------------------ | -------- | ----------------- | ---------------------------------------------------------------- | -------------------------------------------- | -------------- |
+| `Solicitudes`      | Pantalla | Cliente / Técnico | Cliente: sus solicitudes. Técnico: las que recibió               | `src/pages/solicitudes/Solicitudes.jsx`      | 🟡 placeholder |
+| `NuevaSolicitud`   | Pantalla | Cliente           | Crear una solicitud                                              | `src/pages/solicitudes/NuevaSolicitud.jsx`   | 🟡 placeholder |
+| `SolicitudDetalle` | Pantalla | Cliente / Técnico | Vista completa de una solicitud, su estado y acciones            | `src/pages/solicitudes/SolicitudDetalle.jsx` | 🟡 placeholder |
+| `SolicitudForm`    | Bloque   | Cliente           | Tipo de servicio, descripción, dirección y fecha                 | —                                            | ⬜             |
+| `TecnicoSelector`  | Bloque   | Cliente           | Elegir técnico: solo aprobados y sin trabajo activo (4A, 4B)     | —                                            | ⬜             |
+| `SolicitudCard`    | Bloque   | Cliente / Técnico | Resumen de una solicitud en el listado                           | —                                            | ⬜             |
+| `EstadoBadge`      | UI       | Todos             | Estado de la solicitud con los 5 estados del Figma (usa `Badge`) | `src/components/EstadoBadge.jsx`             | ✅             |
+| `AccionesTecnico`  | Bloque   | Técnico           | Aceptar / rechazar; iniciar y completar solo el asignado (D-028) | —                                            | ⬜             |
+| `AccionesCliente`  | Bloque   | Cliente           | Cancelar solo en Pendiente (D-025) / elegir otro técnico         | —                                            | ⬜             |
 
 ## 5. Panel y perfil
 
-| Componente  | Tipo     | Rol   | Descripción                    | Ubicación                 | Estado         |
-| ----------- | -------- | ----- | ------------------------------ | ------------------------- | -------------- |
-| `Dashboard` | Pantalla | Todos | Resumen y accesos según el rol | `src/pages/Dashboard.jsx` | 🟡 placeholder |
-| `Perfil`    | Pantalla | Todos | Ver y editar los datos propios | `src/pages/Perfil.jsx`    | 🟡 placeholder |
+| Componente  | Tipo     | Rol   | Descripción                                          | Ubicación                 | Estado         |
+| ----------- | -------- | ----- | ---------------------------------------------------- | ------------------------- | -------------- |
+| `Dashboard` | Pantalla | Todos | Resumen y accesos según el rol (hoy: título por rol) | `src/pages/Dashboard.jsx` | 🟡 placeholder |
+| `Perfil`    | Pantalla | Todos | Ver y editar los datos propios                       | `src/pages/Perfil.jsx`    | 🟡 placeholder |
 
 ## 6. Panel de administración
 
-| Componente         | Tipo     | Descripción                                                                | Ubicación                           | Estado         |
-| ------------------ | -------- | -------------------------------------------------------------------------- | ----------------------------------- | -------------- |
-| `AdminTecnicos`    | Pantalla | Aprobación de técnicos: pestañas por estado, aprobar / rechazar pendientes | `src/pages/admin/AdminTecnicos.jsx` | ✅ contra mock |
-| `Admin`            | Pantalla | Resumen del panel admin                                                    | `src/pages/Admin.jsx`               | 🟡 placeholder |
-| `AdminUsuarios`    | Pantalla | Listado de usuarios por rol                                                | —                                   | ⬜             |
-| `AdminSolicitudes` | Pantalla | Listado general de solicitudes                                             | —                                   | ⬜             |
-| `AdminStats`       | Bloque   | Indicadores básicos (cantidad de solicitudes y usuarios)                   | —                                   | ⬜             |
+| Componente         | Tipo     | Descripción                                                                  | Ubicación                           | Estado         |
+| ------------------ | -------- | ---------------------------------------------------------------------------- | ----------------------------------- | -------------- |
+| `AdminTecnicos`    | Pantalla | Aprobación de técnicos: pestañas por estado, aprobar / rechazar pendientes   | `src/pages/admin/AdminTecnicos.jsx` | ✅ contra mock |
+| `Admin`            | Pantalla | Resumen del panel admin                                                      | `src/pages/Admin.jsx`               | 🟡 placeholder |
+| `AdminUsuarios`    | Pantalla | Listado de usuarios por rol; suspender y reactivar cuentas (D-027)           | —                                   | ⬜             |
+| `AdminSolicitudes` | Pantalla | Todas las solicitudes, solo con el barrio: sin dirección ni teléfono (D-032) | —                                   | ⬜             |
+| `AdminStats`       | Bloque   | Indicadores básicos (cantidad de solicitudes y usuarios)                     | —                                   | ⬜             |
 
 ## 7. Soporte (no visuales)
 
-| Elemento                    | Descripción                                                                       | Ubicación                      | Estado                  |
-| --------------------------- | --------------------------------------------------------------------------------- | ------------------------------ | ----------------------- |
-| Roles y estados del técnico | Constantes y regla `necesitaAprobacion`                                           | `src/router/roles.js`          | ✅                      |
-| Mensajes                    | Textos de error y confirmación, provisorios hasta tener los del Kit del cliente   | `src/constants/mensajes.js`    | 🟡 provisorio           |
-| Validaciones                | Reglas de los formularios de login y registro                                     | `src/utils/validaciones.js`    | ✅                      |
-| Mock de autenticación       | Usuarios en `localStorage` mientras no hay backend                                | `src/services/authMock.js`     | 🟡 temporal             |
-| Cliente API                 | Axios: manda el JWT en cada pedido y ante un 401 cierra la sesión y va a `/login` | `src/services/api.js`          | ✅ sin conectar todavía |
-| Token de sesión             | Guardar, leer y borrar el JWT (lo usan `AuthContext` y el cliente API)            | `src/services/tokenStorage.js` | ✅                      |
-| Variables de entorno        | `VITE_API_URL`: copiar `.env.example` como `.env` y completar                     | `.env.example`                 | ✅                      |
+| Elemento                    | Descripción                                                                            | Ubicación                      | Estado                  |
+| --------------------------- | -------------------------------------------------------------------------------------- | ------------------------------ | ----------------------- |
+| Roles y estados del técnico | Valores del contrato (`CLIENT`, `TECHNICIAN`, `PENDING`…) y regla `necesitaAprobacion` | `src/router/roles.js`          | ✅                      |
+| Mensajes                    | Textos de error y confirmación, provisorios hasta tener los del Kit del cliente        | `src/constants/mensajes.js`    | 🟡 provisorio           |
+| Validaciones                | Reglas de los formularios de login y registro                                          | `src/utils/validaciones.js`    | ✅                      |
+| Servicio de auth            | Login, registro y datos del usuario; usa el mock o la API según `VITE_USE_MOCK`        | `src/services/authService.js`  | ✅ contra mock          |
+| Mock de autenticación       | Usuarios en `localStorage` con la forma de respuesta del contrato de la API            | `src/services/authMock.js`     | 🟡 temporal             |
+| Cliente API                 | Axios: manda el JWT en cada pedido y ante un 401 cierra la sesión y va a `/login`      | `src/services/api.js`          | ✅ sin conectar todavía |
+| Token de sesión             | Guardar, leer y borrar el JWT (lo usan `AuthContext` y el cliente API)                 | `src/services/tokenStorage.js` | ✅                      |
+| Variables de entorno        | `VITE_API_URL` y `VITE_USE_MOCK`: copiar `.env.example` como `.env`                    | `.env.example`                 | ✅                      |
 
 ## Cómo mantener este inventario
 
