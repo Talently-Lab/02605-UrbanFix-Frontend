@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { buscarBarrio } from '../constants/barrios.js'
 import { MENSAJES } from '../constants/mensajes.js'
 import { ROLES } from '../router/roles.js'
 import { getMe, login as loginRequest, registerClient, registerTechnician } from '../services/authService.js'
@@ -44,10 +45,28 @@ export function AuthProvider({ children }) {
 
   // Cada rol tiene su ruta de registro, y solo se mandan los datos que le corresponden.
   // El Admin no se registra: lo crea el sistema (definición 1A).
-  const register = async ({ role, name, email, password, especialidad, zona }) => {
-    if (role === ROLES.CLIENTE) return startSession(await registerClient({ name, email, password }))
+  const register = async ({
+    role,
+    name,
+    email,
+    password,
+    phone,
+    neighborhood,
+    specialties,
+    licenses,
+    neighborhoods,
+  }) => {
+    const comunes = { name, email, password, phone }
+    if (role === ROLES.CLIENTE) {
+      return startSession(await registerClient({ ...comunes, neighborhood: buscarBarrio(neighborhood) }))
+    }
     if (role === ROLES.TECNICO) {
-      return startSession(await registerTechnician({ name, email, password, especialidad, zona }))
+      // Una entrada por especialidad, con su matrícula si la exige (forma de GET /admin/tecnicos/:id).
+      const conMatricula = specialties.map((category) => ({
+        category,
+        licenseNumber: licenses[category]?.trim() || null,
+      }))
+      return startSession(await registerTechnician({ ...comunes, specialties: conMatricula, neighborhoods }))
     }
     throw new Error(MENSAJES.rolInvalido)
   }

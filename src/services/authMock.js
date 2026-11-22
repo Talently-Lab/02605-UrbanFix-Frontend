@@ -34,17 +34,20 @@ const normalizeEmail = (email) => email.trim().toLowerCase()
 
 // Simula la demora de la red para que la interfaz maneje el estado de carga.
 const DELAY_MS = 600
-const wait = () => new Promise((resolve) => setTimeout(resolve, DELAY_MS))
+export const wait = () => new Promise((resolve) => setTimeout(resolve, DELAY_MS))
 
 // Token simulado. El backend real devolverá un JWT firmado.
 const TOKEN_PREFIX = 'mock-token.'
 const TOKEN_DURATION_S = 24 * 60 * 60 // JWT previsto por Backend: 24 horas.
 const getUserIdFromToken = (token) => (token?.startsWith(TOKEN_PREFIX) ? token.slice(TOKEN_PREFIX.length) : null)
 
+// El backend saca el usuario del token; los otros mocks lo usan para filtrar "lo mío".
+export const getCurrentUserId = () => getUserIdFromToken(getToken())
+
 // Respuesta prevista de la API: solo el token y su duración. Los datos del usuario se piden a /users/me.
 const createSession = (userId) => ({ accessToken: `${TOKEN_PREFIX}${userId}`, expiresIn: TOKEN_DURATION_S })
 
-async function createUser({ role, name, email, password, especialidad, zona }) {
+async function createUser({ role, name, email, password, phone, neighborhood, specialties, neighborhoods }) {
   await wait()
   // Igual que deberá hacer el backend: nunca aceptar "admin" desde el registro.
   if (!ROLES_REGISTRO.includes(role)) throw new Error(MENSAJES.rolInvalido)
@@ -60,11 +63,13 @@ async function createUser({ role, name, email, password, especialidad, zona }) {
     email: normalizedEmail,
     password,
     role,
-    // Especialidad y zona: dónde se cargan en la API está pendiente del contrato.
+    phone: phone.trim(),
+    // Teléfono, barrios, especialidades y matrículas siguen el Figma (A2 - Registro).
+    // Todavía no están en el body de POST /auth/register del contrato: pedido a Backend.
+    // La forma de `technician` imita GET /admin/tecnicos/:id.
+    ...(role === ROLES.CLIENTE && { neighborhood }),
     ...(role === ROLES.TECNICO && {
-      especialidad,
-      zona: zona.trim(),
-      technician: { approvalStatus: ESTADOS_TECNICO.PENDIENTE },
+      technician: { approvalStatus: ESTADOS_TECNICO.PENDIENTE, specialties, neighborhoods },
     }),
   }
   saveUsers([...users, user])
@@ -90,6 +95,9 @@ export async function getMe() {
   if (!user) throw new Error(MENSAJES.sesionInvalida)
   return withoutPassword(user)
 }
+
+// Simula GET /admin/usuarios (sin paginación).
+export const listUsuarios = () => readUsers().map(withoutPassword)
 
 export function listTecnicos() {
   return readUsers()

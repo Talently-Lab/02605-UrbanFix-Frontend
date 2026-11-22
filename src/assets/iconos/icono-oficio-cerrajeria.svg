@@ -1,0 +1,6 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cerrajería">
+  <title>Cerrajería</title>
+  <path d="M10 13V9a6 6 0 0 1 12 0v4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke="#1B3B6F"/>
+  <rect x="5" y="13" width="22" height="15" rx="3.5" stroke-width="2" stroke="#1B3B6F"/>
+  <path d="M16 15.9a3 3 0 0 1 1.5 5.6l.8 3.9h-4.6l.8-3.9A3 3 0 0 1 16 15.9Z" fill="#C75000"/>
+</svg>

@@ -109,6 +109,7 @@
   --radius-sm: 0.5rem; /* 8px */
   --radius-md: 0.75rem; /* 12px */
   --radius-lg: 1rem; /* 16px */
+  --radius-xl: 1.25rem; /* 20px (Corner-radius/xlg: tarjetas y secciones de los dashboards) */
 
   /* Escala tipográfica (tamaño / interlineado). Equivalencia: 1rem = 16px. */
   --text-h1: 4rem; /* 64px */
@@ -116,14 +117,17 @@
   --text-h2: 3rem; /* 48px */
   --text-h2--line-height: 3.875rem; /* 62px */
   --text-h3: 2rem; /* 32px */
-  --text-h3--line-height: 2.5rem; /* 40px */
-  --text-h4: 1.75rem; /* 28px */
-  --text-h4--line-height: 2.25rem; /* 36px */
+  --text-h3--line-height: 2.625rem; /* 42px (auto en Figma) */
+  --text-h3--font-weight: 700;
+  --text-h4: 1.5rem; /* 24px */
+  --text-h4--line-height: 1.9375rem; /* 31px (auto en Figma) */
+  --text-h4--font-weight: 600;
   --text-h5: 1.25rem; /* 20px */
   --text-h5--line-height: 1.625rem; /* 26px */
+  --text-h5--font-weight: 600;
 
   --text-body: 1rem; /* 16px */
-  --text-body--line-height: 1.5rem; /* 24px */
+  --text-body--line-height: 1.3125rem; /* 21px (auto en Figma) */
   --text-body-sm: 0.875rem; /* 14px (estilo Body-small/regular) */
   --text-body-sm--line-height: 1.125rem; /* 18px */
   --text-button: 0.875rem; /* 14px */
@@ -134,6 +138,7 @@
   --text-input--line-height: 1.4375rem; /* 23px */
   --text-caption: 0.75rem; /* 12px */
   --text-caption--line-height: 1rem; /* 16px */
+  --text-caption--font-weight: 600;
 }
 
 /* Estilos base de la página. */

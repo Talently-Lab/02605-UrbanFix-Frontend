@@ -1,15 +1,15 @@
-import { Menu } from 'lucide-react'
-import { useState } from 'react'
-import { Link, Outlet, useNavigate } from 'react-router'
+import { Outlet, useNavigate } from 'react-router'
+import BottomNav from '../components/BottomNav.jsx'
+import Logo from '../components/Logo.jsx'
 import Sidebar from '../components/Sidebar.jsx'
+import UserMenu from '../components/UserMenu.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 
+// App autenticada (Figma C1/T1). Escritorio: Sidebar a la izquierda y chip del usuario arriba a la derecha.
+// Celular: barra superior con el isotipo y el avatar, y la navegación fija abajo.
 export default function AppLayout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  const closeMenu = () => setMenuOpen(false)
 
   const handleLogout = () => {
     logout()
@@ -17,43 +17,22 @@ export default function AppLayout() {
   }
 
   return (
-    <div className="min-h-screen bg-surface-50 lg:flex">
-      <Sidebar role={user.role} open={menuOpen} onClose={closeMenu} onLogout={handleLogout} />
-
-      {/* Fondo oscuro detrás del menú en celular: al tocarlo se cierra. */}
-      {menuOpen && (
-        <div aria-hidden="true" onClick={closeMenu} className="fixed inset-0 z-20 bg-surface-dark/60 lg:hidden" />
-      )}
+    <div className="min-h-screen bg-surface-100 lg:flex">
+      <Sidebar role={user.role} onLogout={handleLogout} />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center justify-between gap-4 border-b border-border bg-surface-100 px-4 py-3 lg:justify-end lg:border-b-0 lg:bg-transparent lg:px-8 lg:pt-6">
-          <button
-            type="button"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Abrir menú"
-            className="rounded-sm p-2 text-ink lg:hidden"
-          >
-            <Menu className="h-5 w-5" aria-hidden="true" />
-          </button>
-
-          <Link
-            to="/perfil"
-            className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-100 py-1 pr-3 pl-1 text-body-sm font-semibold text-ink hover:bg-surface-50"
-          >
-            <span
-              aria-hidden="true"
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-subtle text-caption text-primary"
-            >
-              {user.name.charAt(0).toUpperCase()}
-            </span>
-            {user.name}
-          </Link>
+        <header className="flex h-14 items-center justify-between border-b border-surface-200 bg-surface-100 px-4 lg:h-22 lg:justify-end lg:border-b-0 lg:px-10">
+          <Logo variant="isotipo" to="/panel" className="lg:hidden" imgClassName="h-8" />
+          <UserMenu name={user.name} onLogout={handleLogout} />
         </header>
 
-        <main className="flex-1">
+        {/* pb-16: espacio para que la barra inferior no tape el final del contenido en celular. */}
+        <main className="flex-1 pt-6 pb-16 lg:pt-0 lg:pb-0">
           <Outlet />
         </main>
       </div>
+
+      <BottomNav role={user.role} />
     </div>
   )
 }
