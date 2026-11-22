@@ -60,8 +60,11 @@ Las rutas y sus permisos se definen en `src/router/index.jsx`; los roles, en `sr
 Todas las llamadas pasan por servicios en `src/services/`; las pantallas no saben si hablan con la API o con el mock.
 
 - `api.js`: cliente de Axios. Manda el token (`Authorization: Bearer`) en cada pedido y, ante un 401, cierra la sesión y lleva a `/login`.
-- `authService.js`: login, registro y datos del usuario. Usa el mock o la API según `VITE_USE_MOCK`.
-- `authMock.js`: backend simulado en `localStorage`, con la misma forma de respuesta que el contrato de la API.
+- `request.js`: decide si se usa el mock o la API (`USE_MOCK`, según `VITE_USE_MOCK`) y devuelve directamente el `data` de la respuesta del contrato.
+- `authService.js`: login, registro y datos del usuario.
+- `solicitudesService.js`: listados de solicitudes para cada rol (mis solicitudes, para revisar, mis trabajos y todas para el admin).
+- `adminService.js`: listado de usuarios para el panel de administración.
+- `authMock.js` y `solicitudesMock.js`: backend simulado en `localStorage`, con la misma forma de respuesta que el contrato de la API.
 
 Los valores de roles (`CLIENT`, `TECHNICIAN`, `ADMIN`) y estados siguen el contrato de Backend; los textos en pantalla están en español.
 
@@ -69,7 +72,8 @@ Los valores de roles (`CLIENT`, `TECHNICIAN`, `ADMIN`) y estados siguen el contr
 >
 > - Registro en `/registro` como cliente o técnico (no hay registro de Admin). Los técnicos quedan **pendientes de aprobación** y solo ven `/cuenta-en-revision` hasta que el Admin los apruebe en `/admin/tecnicos`.
 > - Admin de prueba (simula el seed del backend): `admin@urbanfix.com` / `admin1234`.
-> - Para empezar de cero, borrar `urbanfix:users-v2` y `urbanfix:token` en DevTools → Application → Local Storage.
+> - Para ver los dashboards con datos: iniciar sesión como cliente o técnico, ejecutar `urbanfixMock.cargarEjemplos()` en la consola del navegador y recargar. `urbanfixMock.borrarSolicitudes()` vuelve al estado vacío. Solo existe en desarrollo.
+> - Para empezar de cero, borrar `urbanfix:users-v2`, `urbanfix:solicitudes-v1` y `urbanfix:token` en DevTools → Application → Local Storage.
 > - Los textos de error están en `src/constants/mensajes.js` y son provisorios hasta tener los del Kit del cliente.
 
 ## Design system
@@ -78,7 +82,8 @@ Los estilos salen del Figma del equipo (Variables y Estilos de texto) y están d
 
 - **Colores:** primitivos (`--azul-700`, `--gris-300`…) y semánticos, que son los únicos que usan los componentes: `bg-primary`, `text-ink`, `text-ink-muted`, `border-border`, `bg-surface-50`, `bg-warning-subtle`, etc. La paleta por defecto de Tailwind está desactivada.
 - **Tipografía:** IBM Plex Sans, con las clases `text-h1` … `text-h5`, `text-body`, `text-body-sm`, `text-button`, `text-label`, `text-input` y `text-caption`.
-- **Radios:** `rounded-sm` (8px), `rounded-md` (12px), `rounded-lg` (16px) y `rounded-full`.
+- **Radios:** `rounded-sm` (8px), `rounded-md` (12px), `rounded-lg` (16px), `rounded-xl` (20px, tarjetas y secciones de los dashboards) y `rounded-full`.
+- **Diseño responsive:** se diseña para celular primero; desde `lg:` (1024px) aparece el Sidebar y el diseño de escritorio. En celular la navegación es la barra inferior (`BottomNav`).
 - **Espaciados:** coinciden con la escala de Tailwind (`p-4` = 16px).
 
 El formato del código lo aplica Prettier (`npm run format`); conviene instalar la extensión recomendada de VS Code.
@@ -87,16 +92,19 @@ El formato del código lo aplica Prettier (`npm run format`); conviene instalar 
 
 ```
 src/
-├── assets/       Imágenes y logo
-├── components/   Componentes con lógica propia (Sidebar, Logo, EstadoBadge)
-│   └── ui/       Componentes base del design system (Button, Input, Badge, Card, Modal…)
-├── constants/    Textos de mensajes y catálogos (especialidades, estados)
-├── context/      Estado global (sesión)
-├── layouts/      Layout de acceso (login/registro) y de la app autenticada
-├── pages/        Una carpeta/archivo por pantalla
-├── router/       Rutas, protección por rol y roles
-├── services/     Acceso a datos: cliente de API, servicios y mocks
-└── utils/        Validaciones de formularios
+├── assets/         Imágenes, logo e íconos de los oficios
+├── components/     Componentes con lógica propia (Sidebar, BottomNav, UserMenu, Logo, EstadoBadge)
+│   ├── dashboard/  Bloques compartidos por los dashboards (secciones, resumen por estado, selector de oficios)
+│   ├── registro/   Selectores del registro de técnico (especialidades y barrios)
+│   └── ui/         Componentes base del design system (Button, ButtonLink, Input, Badge, Card, Modal…)
+├── constants/      Textos de mensajes y catálogos (especialidades, barrios, estados)
+├── context/        Estado global (sesión)
+├── hooks/          Hooks reutilizables (useAsync: carga de datos con loading y error)
+├── layouts/        Layout de acceso (login/registro) y de la app autenticada
+├── pages/          Una carpeta/archivo por pantalla (dashboard/: uno por rol)
+├── router/         Rutas, protección por rol, roles y links del menú
+├── services/       Acceso a datos: cliente de API, servicios y mocks
+└── utils/          Validaciones de formularios y formato de fechas
 ```
 
 ## Documentación
