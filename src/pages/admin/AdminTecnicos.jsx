@@ -4,7 +4,7 @@ import Button from '../../components/ui/Button.jsx'
 import Card from '../../components/ui/Card.jsx'
 import EmptyState from '../../components/ui/EmptyState.jsx'
 import Modal from '../../components/ui/Modal.jsx'
-import { getEspecialidadLabel } from '../../constants/especialidades.js'
+import { listarEspecialidades } from '../../constants/especialidades.js'
 import { MENSAJES } from '../../constants/mensajes.js'
 import { ESTADOS_TECNICO, getApprovalStatus } from '../../router/roles.js'
 import { listTecnicos, setEstadoTecnico } from '../../services/authMock.js'
@@ -48,7 +48,7 @@ export default function AdminTecnicos() {
 
   return (
     <section className="mx-auto max-w-4xl p-6">
-      <h1 className="text-h4 font-bold text-ink">Aprobación de técnicos</h1>
+      <h1 className="text-h4 text-ink">Aprobación de técnicos</h1>
       <p className="mt-1 text-body-sm text-ink-muted">
         Revisá los datos de cada técnico antes de aprobarlo. Solo los técnicos aprobados pueden recibir solicitudes.
       </p>
@@ -94,7 +94,8 @@ export default function AdminTecnicos() {
                 <p className="font-semibold text-ink">{tecnico.name}</p>
                 <p className="text-ink-muted">{tecnico.email}</p>
                 <p className="mt-1 text-ink-muted">
-                  {getEspecialidadLabel(tecnico.especialidad)} · {tecnico.zona}
+                  {listarEspecialidades((tecnico.technician?.specialties ?? []).map((e) => e.category))} ·{' '}
+                  {(tecnico.technician?.neighborhoods ?? []).join(', ')}
                 </p>
               </div>
               {tab === ESTADOS_TECNICO.PENDIENTE && (

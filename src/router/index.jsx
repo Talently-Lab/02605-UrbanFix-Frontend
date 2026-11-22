@@ -23,10 +23,11 @@ export const router = createBrowserRouter([
     children: [
       { path: '/login', element: <Login /> },
       { path: '/registro', element: <Registro /> },
-      // Requiere sesión, pero solo para técnicos sin aprobar: la propia página redirige al resto.
-      { path: '/cuenta-en-revision', element: <CuentaEnRevision /> },
     ],
   },
+  // Requiere sesión, pero solo para técnicos sin aprobar: la propia página redirige al resto.
+  // Tiene su propia barra superior (Figma T0), por eso no va dentro de AuthLayout.
+  { path: '/cuenta-en-revision', element: <CuentaEnRevision /> },
   {
     element: <ProtectedRoute />,
     children: [

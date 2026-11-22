@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext.jsx'
 import { guardarCredenciales } from '../utils/credenciales.js'
 import { validarLogin } from '../utils/validaciones.js'
 
+// Figma A1 - Login (y su estado "cargando": "Ingresando…").
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
@@ -41,13 +42,13 @@ export default function Login() {
   }
 
   return (
-    <>
-      <h1 className="text-h4 font-bold text-ink">Ingresá a tu cuenta</h1>
+    <div className="flex flex-col gap-4.5">
+      <h1 className="text-h3 text-ink">Ingresá a tu cuenta</h1>
 
-      <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4.5">
         {formError && <Alert variant="error">{formError}</Alert>}
         <Input
-          label="Email"
+          label="Correo electrónico"
           name="email"
           type="email"
           autoComplete="email"
@@ -61,21 +62,22 @@ export default function Login() {
           name="password"
           type="password"
           autoComplete="current-password"
+          placeholder="••••••••"
           value={values.password}
           onChange={handleChange}
           error={errors.password}
         />
         <Button type="submit" className="w-full" loading={submitting}>
-          Ingresar
+          {submitting ? 'Ingresando…' : 'Iniciar sesión'}
         </Button>
       </form>
 
-      <p className="mt-6 text-body-sm text-ink-muted">
-        ¿Todavía no tenés cuenta?{' '}
-        <Link to="/registro" className="font-semibold text-ink underline hover:text-primary">
+      <p className="flex flex-wrap justify-center gap-1.5 text-body text-ink-muted">
+        ¿Todavía no tenés cuenta?
+        <Link to="/registro" className="text-input font-semibold text-ink underline hover:text-primary">
           Creá tu cuenta
         </Link>
       </p>
-    </>
+    </div>
   )
 }

@@ -1,15 +1,19 @@
-import Placeholder from '../components/Placeholder.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { ROLES } from '../router/roles.js'
+import DashboardAdmin from './dashboard/DashboardAdmin.jsx'
+import DashboardCliente from './dashboard/DashboardCliente.jsx'
+import DashboardTecnico from './dashboard/DashboardTecnico.jsx'
 
-// Cada rol ve su propio panel en /panel. Contenido provisorio hasta tener los diseños de cada uno.
-const TITULOS = {
-  [ROLES.CLIENTE]: 'Panel del cliente',
-  [ROLES.TECNICO]: 'Panel del técnico',
-  [ROLES.ADMIN]: 'Panel de administración',
+// /panel es una sola ruta: cada rol ve su propio dashboard.
+// ProtectedRoute ya garantiza que hay sesión y que el técnico está aprobado.
+const DASHBOARDS = {
+  [ROLES.CLIENTE]: DashboardCliente,
+  [ROLES.TECNICO]: DashboardTecnico,
+  [ROLES.ADMIN]: DashboardAdmin,
 }
 
 export default function Dashboard() {
   const { user } = useAuth()
-  return <Placeholder title={TITULOS[user.role]} />
+  const DashboardDelRol = DASHBOARDS[user.role]
+  return <DashboardDelRol />
 }

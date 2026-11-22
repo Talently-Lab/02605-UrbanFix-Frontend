@@ -1,40 +1,50 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { Link, useNavigate } from 'react-router'
+import BarriosSelector from '../components/registro/BarriosSelector.jsx'
+import EspecialidadesChips from '../components/registro/EspecialidadesChips.jsx'
 import Alert from '../components/ui/Alert.jsx'
 import Button from '../components/ui/Button.jsx'
 import Input from '../components/ui/Input.jsx'
-import Select from '../components/ui/Select.jsx'
-import { ESPECIALIDADES } from '../constants/especialidades.js'
+import { BARRIOS_CABA } from '../constants/barrios.js'
+import { MATRICULAS } from '../constants/especialidades.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import { ROLES } from '../router/roles.js'
 import { guardarCredenciales } from '../utils/credenciales.js'
 import { validarRegistro } from '../utils/validaciones.js'
 
 const ROLE_OPTIONS = [
-  { value: ROLES.CLIENTE, title: 'Soy cliente', description: 'Necesito contratar un servicio técnico.' },
-  { value: ROLES.TECNICO, title: 'Soy técnico', description: 'Quiero ofrecer mis servicios.' },
+  { value: ROLES.CLIENTE, title: 'Soy cliente', description: 'Necesito un arreglo' },
+  { value: ROLES.TECNICO, title: 'Soy técnico', description: 'Ofrezco mis servicios' },
 ]
 
+// En el Figma arranca con "Soy cliente" elegido.
 const INITIAL_VALUES = {
-  role: '',
+  role: ROLES.CLIENTE,
   name: '',
   email: '',
+  phone: '',
   password: '',
-  confirmPassword: '',
-  especialidad: '',
-  zona: '',
+  neighborhood: '',
+  specialties: [],
+  licenses: { ELECTRICITY: '', GAS: '' },
+  neighborhoods: [],
+  terms: false,
 }
 
+// Figma A2 - Registro-cliente y A2 - Registro-técnico (y sus versiones mobile).
 export default function Registro() {
   const { register } = useAuth()
   const navigate = useNavigate()
+  const barriosListId = useId()
 
   const [values, setValues] = useState(INITIAL_VALUES)
   const [errors, setErrors] = useState({})
   const [formError, setFormError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
-  const handleChange = (e) => setValues({ ...values, [e.target.name]: e.target.value })
+  const setValue = (name, value) => setValues({ ...values, [name]: value })
+  const handleChange = (e) => setValue(e.target.name, e.target.type === 'checkbox' ? e.target.checked : e.target.value)
+  const handleLicense = (codigo) => (e) => setValue('licenses', { ...values.licenses, [codigo]: e.target.value })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -59,111 +69,171 @@ export default function Registro() {
   const isTecnico = values.role === ROLES.TECNICO
 
   return (
-    <>
-      <h1 className="text-h4 font-bold text-ink">Creá tu cuenta</h1>
+    <div className="flex flex-col gap-4.5">
+      <h1 className="text-h3 text-ink">Creá tu cuenta</h1>
 
-      <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4.5">
         {formError && <Alert variant="error">{formError}</Alert>}
 
         <fieldset>
-          <legend className="mb-2 text-label font-semibold text-ink">¿Cómo vas a usar UrbanFix?</legend>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {ROLE_OPTIONS.map(({ value, title, description }) => (
-              <label
-                key={value}
-                className={`cursor-pointer rounded-sm border p-3 text-body-sm ${
-                  values.role === value ? 'border-primary bg-primary-subtle' : 'border-border hover:bg-surface-200'
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="role"
-                  value={value}
-                  checked={values.role === value}
-                  onChange={handleChange}
-                  className="sr-only"
-                />
-                <span className="block font-semibold text-ink">{title}</span>
-                <span className="text-ink-muted">{description}</span>
-              </label>
-            ))}
+          <legend className="sr-only">¿Cómo vas a usar UrbanFix?</legend>
+          <div className="grid grid-cols-2 gap-3 lg:gap-4">
+            {ROLE_OPTIONS.map(({ value, title, description }) => {
+              const elegido = values.role === value
+              return (
+                <label
+                  key={value}
+                  className={`flex cursor-pointer flex-col gap-1 rounded-[10px] p-4 transition-colors has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-primary lg:px-6 ${
+                    elegido
+                      ? 'border-2 border-primary bg-primary text-sobre-oscuro'
+                      : 'border border-border bg-surface-100 text-ink hover:bg-surface-50'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="role"
+                    value={value}
+                    checked={elegido}
+                    onChange={handleChange}
+                    className="sr-only"
+                  />
+                  <span className="text-body font-semibold">{title}</span>
+                  <span className={`text-body-sm ${elegido ? 'text-sobre-oscuro-2' : ''}`}>{description}</span>
+                </label>
+              )
+            })}
           </div>
           {errors.role && <p className="mt-1.5 text-body-sm text-danger">{errors.role}</p>}
         </fieldset>
 
-        <Input
-          label="Nombre y apellido"
-          name="name"
-          autoComplete="name"
-          value={values.name}
-          onChange={handleChange}
-          error={errors.name}
-        />
-        <Input
-          label="Email"
-          name="email"
-          type="email"
-          autoComplete="email"
-          value={values.email}
-          onChange={handleChange}
-          error={errors.email}
-        />
-
-        {isTecnico && (
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Select
-              label="Especialidad"
-              name="especialidad"
-              options={ESPECIALIDADES}
-              value={values.especialidad}
-              onChange={handleChange}
-              error={errors.especialidad}
-            />
-            <Input
-              label="Zona de trabajo"
-              name="zona"
-              placeholder="Ej.: Palermo"
-              value={values.zona}
-              onChange={handleChange}
-              error={errors.zona}
-            />
-          </div>
-        )}
-
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="flex flex-col gap-3">
+          <Input
+            label="Nombre y apellido"
+            name="name"
+            autoComplete="name"
+            placeholder="Ej: Laura Martínez"
+            value={values.name}
+            onChange={handleChange}
+            error={errors.name}
+          />
+          <Input
+            label="Correo electrónico"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="nombre@email.com"
+            value={values.email}
+            onChange={handleChange}
+            error={errors.email}
+          />
+          <Input
+            label="Teléfono"
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            placeholder="Ej.: 11 5555-0000"
+            value={values.phone}
+            onChange={handleChange}
+            error={errors.phone}
+          />
           <Input
             label="Contraseña"
             name="password"
             type="password"
             autoComplete="new-password"
+            placeholder="Mínimo 8 caracteres"
             value={values.password}
             onChange={handleChange}
             error={errors.password}
           />
-          <Input
-            label="Repetir contraseña"
-            name="confirmPassword"
-            type="password"
-            autoComplete="new-password"
-            value={values.confirmPassword}
-            onChange={handleChange}
-            error={errors.confirmPassword}
-          />
+
+          {!isTecnico && (
+            <>
+              <Input
+                label="Ubicación"
+                name="neighborhood"
+                list={barriosListId}
+                autoComplete="off"
+                placeholder="Barrio de CABA"
+                value={values.neighborhood}
+                onChange={handleChange}
+                error={errors.neighborhood}
+              />
+              <datalist id={barriosListId}>
+                {BARRIOS_CABA.map((barrio) => (
+                  <option key={barrio} value={barrio} />
+                ))}
+              </datalist>
+            </>
+          )}
         </div>
 
-        {isTecnico && <Alert variant="info">Tu cuenta quedará pendiente hasta que un administrador la apruebe.</Alert>}
+        {isTecnico && (
+          <>
+            <EspecialidadesChips
+              value={values.specialties}
+              onChange={(specialties) => setValue('specialties', specialties)}
+              error={errors.specialties}
+            />
+            {/* Matrícula obligatoria solo para las especialidades que la exigen (D-016). */}
+            {Object.entries(MATRICULAS)
+              .filter(([codigo]) => values.specialties.includes(codigo))
+              .map(([codigo, label]) => (
+                <Input
+                  key={codigo}
+                  label={label}
+                  name={`license-${codigo}`}
+                  placeholder="Ej.: 12.345"
+                  value={values.licenses[codigo]}
+                  onChange={handleLicense(codigo)}
+                  error={errors[`license-${codigo}`]}
+                />
+              ))}
+            <BarriosSelector
+              value={values.neighborhoods}
+              onChange={(neighborhoods) => setValue('neighborhoods', neighborhoods)}
+              error={errors.neighborhoods}
+            />
+            <p className="text-[0.8125rem] leading-5 text-ink-muted">
+              Tu cuenta queda pendiente hasta que el equipo de UrbanFix revise tus datos.
+            </p>
+          </>
+        )}
+
+        <div>
+          <label className="flex cursor-pointer items-start gap-2.5 text-body-sm text-ink">
+            <input
+              type="checkbox"
+              name="terms"
+              checked={values.terms}
+              onChange={handleChange}
+              aria-invalid={Boolean(errors.terms)}
+              aria-describedby={errors.terms ? 'terms-error' : undefined}
+              className="mt-px h-4.5 w-4.5 shrink-0 cursor-pointer accent-primary"
+            />
+            <span>
+              Acepto los <strong className="font-semibold">términos y condiciones</strong> y la{' '}
+              <strong className="font-semibold">política de privacidad</strong>.
+            </span>
+          </label>
+          {errors.terms && (
+            <p id="terms-error" className="mt-1.5 text-body-sm text-danger">
+              {errors.terms}
+            </p>
+          )}
+        </div>
 
         <Button type="submit" className="w-full" loading={submitting}>
           Crear cuenta
         </Button>
       </form>
 
-      <p className="mt-6 text-body-sm text-ink-muted">
-        ¿Ya tenés cuenta?{' '}
+      <p className="flex flex-wrap justify-center gap-1.5 text-input text-ink-muted">
+        ¿Ya tenés cuenta?
         <Link to="/login" className="font-semibold text-ink underline hover:text-primary">
-          Ingresá
+          Iniciá sesión
         </Link>
       </p>
-    </>
+    </div>
   )
 }
