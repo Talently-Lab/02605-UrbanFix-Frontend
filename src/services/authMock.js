@@ -56,7 +56,7 @@ const barriosDe = (technician) =>
 const technicianId = (user) => user.technician?.id ?? user.id
 
 // Identidad de la cuenta (contrato, bloque 5). `specialties` y `neighborhoods` dentro de `technician`
-// no están en el contrato: se pidieron a Backend para "cuenta en revisión" y el dashboard del técnico.
+// los confirmó Backend el 22/11 para "cuenta en revisión" y el dashboard del técnico; todavía no figuran en el contrato.
 const toUser = (user) => ({
   id: user.id,
   name: user.name,

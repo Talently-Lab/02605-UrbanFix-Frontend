@@ -33,8 +33,15 @@ const resumen = (s) => ({
   status: s.status,
 })
 
+// Una oferta es vigente si sigue PENDING y no pasó su expiresAt (contrato, bloque 11). La solicitud puede
+// seguir PENDING con la oferta vencida o rechazada: en ese caso el cliente tiene que elegir otro técnico.
+const ofertaVigente = (s) =>
+  s.status === ESTADOS_SOLICITUD.PENDIENTE &&
+  s.offer?.status === 'PENDING' &&
+  s.offer.expiresAt > new Date().toISOString()
+
 // Simula GET /solicitudes/mias: las solicitudes del cliente autenticado (bloque 10).
-// `offer` no está en el contrato: se pidió a Backend para mostrar al técnico elegido y su plazo de 24 h.
+// `offer` (solo si está vigente) lo confirmó Backend el 22/11: todavía no figura en el contrato.
 export async function getMisSolicitudes() {
   await wait()
   const clientId = getCurrentUserId()
@@ -46,7 +53,7 @@ export async function getMisSolicitudes() {
       technicianName: s.technicianName,
       createdAt: s.createdAt,
       acceptedAt: s.acceptedAt ?? null,
-      offer: s.offer && { technicianName: s.offer.technicianName, expiresAt: s.offer.expiresAt },
+      offer: ofertaVigente(s) ? { technicianName: s.offer.technicianName, expiresAt: s.offer.expiresAt } : null,
     }))
 }
 
@@ -54,12 +61,8 @@ export async function getMisSolicitudes() {
 export async function getSolicitudesParaRevisar() {
   await wait()
   const technicianId = getCurrentUserId()
-  const ahora = new Date().toISOString()
   return readSolicitudes()
-    .filter(
-      (s) =>
-        s.status === ESTADOS_SOLICITUD.PENDIENTE && s.offer?.technicianId === technicianId && s.offer.expiresAt > ahora,
-    )
+    .filter((s) => ofertaVigente(s) && s.offer.technicianId === technicianId)
     .map((s) => ({
       ...resumen(s),
       offer: { id: s.offer.id, status: s.offer.status, createdAt: s.offer.createdAt, expiresAt: s.offer.expiresAt },
