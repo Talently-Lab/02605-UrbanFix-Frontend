@@ -17,7 +17,7 @@ import { horasRestantes, primerNombre } from '../../utils/fechas.js'
 // Los dos pedidos a la vez: lo que tiene para revisar y sus trabajos asignados.
 const cargarPanel = async () => {
   const [paraRevisar, trabajos] = await Promise.all([getSolicitudesParaRevisar(), getMisTrabajos()])
-  return { paraRevisar: paraRevisar.items, trabajos: trabajos.items }
+  return { paraRevisar, trabajos }
 }
 
 // Aceptada y En curso cuentan como trabajo activo; el técnico tiene como máximo uno (definición 4B).
@@ -208,7 +208,7 @@ function ListaParaRevisar({ solicitudes }) {
   return (
     <ul className="flex flex-col gap-4 lg:gap-0 lg:divide-y lg:divide-surface-200">
       {solicitudes.map((s) => {
-        const horas = horasRestantes(s.currentOffer.expiresAt)
+        const horas = horasRestantes(s.offer.expiresAt)
         return (
           <li key={s.id}>
             <Link

@@ -6,13 +6,13 @@ import ButtonLink from '../../components/ui/ButtonLink.jsx'
 import EmptyState from '../../components/ui/EmptyState.jsx'
 import { ESTADOS_SOLICITUD } from '../../constants/solicitudes.js'
 import { useAsync } from '../../hooks/useAsync.js'
-import { ESTADOS_TECNICO, getApprovalStatus, ROLES } from '../../router/roles.js'
-import { getUsuarios } from '../../services/adminService.js'
+import { ESTADOS_TECNICO, ROLES } from '../../router/roles.js'
+import { getTecnicos, getUsuarios } from '../../services/adminService.js'
 import { getTodasLasSolicitudes } from '../../services/solicitudesService.js'
 
 const cargarPanel = async () => {
-  const [usuarios, solicitudes] = await Promise.all([getUsuarios(), getTodasLasSolicitudes()])
-  return { usuarios: usuarios.items, solicitudes: solicitudes.items }
+  const [usuarios, tecnicos, solicitudes] = await Promise.all([getUsuarios(), getTecnicos(), getTodasLasSolicitudes()])
+  return { usuarios, tecnicos, solicitudes }
 }
 
 // PROVISORIO: el admin no tiene dashboard en el Figma. Usa los mismos bloques que C1 y T1,
@@ -33,10 +33,10 @@ export default function DashboardAdmin() {
   )
 }
 
-function Contenido({ usuarios, solicitudes }) {
-  const tecnicos = usuarios.filter((u) => u.role === ROLES.TECNICO)
-  const pendientes = tecnicos.filter((t) => getApprovalStatus(t) === ESTADOS_TECNICO.PENDIENTE).length
-  const aprobados = tecnicos.filter((t) => getApprovalStatus(t) === ESTADOS_TECNICO.APROBADO).length
+function Contenido({ usuarios, tecnicos, solicitudes }) {
+  // GET /admin/usuarios no trae la aprobación: sale de GET /admin/tecnicos.
+  const pendientes = tecnicos.filter((t) => t.approvalStatus === ESTADOS_TECNICO.PENDIENTE).length
+  const aprobados = tecnicos.filter((t) => t.approvalStatus === ESTADOS_TECNICO.APROBADO).length
   const clientes = usuarios.filter((u) => u.role === ROLES.CLIENTE).length
   const resumen = Object.values(ESTADOS_SOLICITUD).map((estado) => ({
     estado,

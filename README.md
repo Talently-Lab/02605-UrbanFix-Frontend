@@ -25,7 +25,7 @@ La app queda en http://localhost:5173.
 
 | Variable        | Qué hace                                                                       |
 | --------------- | ------------------------------------------------------------------------------ |
-| `VITE_API_URL`  | URL base de la API del backend                                                 |
+| `VITE_API_URL`  | URL base de la API del backend, terminada en `/api`                            |
 | `VITE_USE_MOCK` | `true` o sin definir: usa datos simulados. `false`: se conecta con la API real |
 
 Sin `.env`, la app funciona igual con los datos simulados.
@@ -57,13 +57,15 @@ Las rutas y sus permisos se definen en `src/router/index.jsx`; los roles, en `sr
 
 ## Conexión con el backend
 
-Todas las llamadas pasan por servicios en `src/services/`; las pantallas no saben si hablan con la API o con el mock.
+Todas las llamadas pasan por servicios en `src/services/`; las pantallas no saben si hablan con la API o con el mock. Las rutas, los bodies, las respuestas y los errores siguen el [contrato de API](docs/api-contract.md) de Backend.
 
 - `api.js`: cliente de Axios. Manda el token (`Authorization: Bearer`) en cada pedido y, ante un 401, cierra la sesión y lleva a `/login`.
-- `request.js`: decide si se usa el mock o la API (`USE_MOCK`, según `VITE_USE_MOCK`) y devuelve directamente el `data` de la respuesta del contrato.
-- `authService.js`: login, registro y datos del usuario.
+- `request.js`: decide si se usa el mock o la API (`USE_MOCK`, según `VITE_USE_MOCK`), devuelve el cuerpo de la respuesta y convierte los errores en `ApiError`.
+- `apiError.js`: error con el formato del contrato (RFC 9457). `message` es el `detail` que se muestra; `fieldErrors` trae el error de cada campo del formulario.
+- `authService.js`: login, registro (un solo endpoint con el rol en el body) y datos del usuario (`/usuarios/me`). El registro no devuelve token: después se inicia sesión.
+- `catalogosService.js`: catálogo de barrios de CABA (`/barrios`).
 - `solicitudesService.js`: listados de solicitudes para cada rol (mis solicitudes, para revisar, mis trabajos y todas para el admin).
-- `adminService.js`: listado de usuarios para el panel de administración.
+- `adminService.js`: usuarios, perfiles técnicos y aprobación o rechazo para el panel de administración.
 - `authMock.js` y `solicitudesMock.js`: backend simulado en `localStorage`, con la misma forma de respuesta que el contrato de la API.
 
 Los valores de roles (`CLIENT`, `TECHNICIAN`, `ADMIN`) y estados siguen el contrato de Backend; los textos en pantalla están en español.
@@ -111,3 +113,4 @@ src/
 
 - [Inventario de componentes](docs/componentes.md)
 - [Arquitectura de rutas](docs/rutas.md)
+- [Contrato de API](docs/api-contract.md) (Backend, versión del 19/11/2026)

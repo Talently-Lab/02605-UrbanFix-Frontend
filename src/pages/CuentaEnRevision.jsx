@@ -152,7 +152,7 @@ function DatosEnviados({ user }) {
             {licenseNumber}
           </Dato>
         ))}
-        <Dato etiqueta="Barrios">{(user.technician?.neighborhoods ?? []).join(', ') || '—'}</Dato>
+        <Dato etiqueta="Barrios">{(user.technician?.neighborhoods ?? []).map((b) => b.name).join(', ') || '—'}</Dato>
       </dl>
     </Tarjeta>
   )

@@ -11,6 +11,7 @@ export const MENSAJES = {
   barriosObligatorios: 'Elegí al menos un barrio donde trabajás.',
   terminosObligatorios: 'Para crear tu cuenta tenés que aceptar los términos y la política de privacidad.',
   emailEnUso: 'Ya existe una cuenta con este email.',
+  emailEnMayusculas: 'El email debe enviarse únicamente en minúsculas.',
   credencialesInvalidas: 'Email o contraseña incorrectos.',
   sesionInvalida: 'Tu sesión expiró. Iniciá sesión de nuevo.',
   errorInesperado: 'No pudimos completar la acción. Probá de nuevo en unos minutos.',

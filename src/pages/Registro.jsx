@@ -31,6 +31,17 @@ const INITIAL_VALUES = {
   terms: false,
 }
 
+// Pasa los campos de error de la API (contrato, bloque 2 de errores) a los nombres del formulario.
+function erroresDelFormulario(fieldErrors = {}) {
+  const errores = {}
+  for (const [campo, mensaje] of Object.entries(fieldErrors)) {
+    if (campo === 'neighborhoodIds') errores.neighborhoods = mensaje
+    else if (campo.startsWith('specialties')) errores.specialties = mensaje
+    else errores[campo] = mensaje
+  }
+  return errores
+}
+
 // Figma A2 - Registro-cliente y A2 - Registro-técnico (y sus versiones mobile).
 export default function Registro() {
   const { register } = useAuth()
@@ -61,6 +72,7 @@ export default function Registro() {
       navigate('/panel', { replace: true })
     } catch (err) {
       setFormError(err.message)
+      setErrors(erroresDelFormulario(err.fieldErrors))
     } finally {
       setSubmitting(false)
     }

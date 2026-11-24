@@ -18,6 +18,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     // En el login, un 401 es "contraseña incorrecta": se muestra el error en el formulario.
+    // Un 403 (cuenta suspendida, rol sin permiso, técnico sin aprobar) no cierra la sesión: se muestra el mensaje.
     const isLoginRequest = error.config?.url === '/auth/login'
     if (error.response?.status === 401 && !isLoginRequest) {
       clearToken()
