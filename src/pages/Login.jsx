@@ -36,6 +36,8 @@ export default function Login() {
       navigate(from, { replace: true })
     } catch (err) {
       setFormError(err.message)
+      // Errores de validación de la API: los campos se llaman igual que en el formulario (email, password).
+      setErrors(err.fieldErrors ?? {})
     } finally {
       setSubmitting(false)
     }

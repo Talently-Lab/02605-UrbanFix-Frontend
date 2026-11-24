@@ -2,14 +2,13 @@ import { api } from './api.js'
 import * as mock from './authMock.js'
 import { request, USE_MOCK } from './request.js'
 
-// Rutas previstas por Backend (contrato todavía sin cerrar).
+// Contrato de API, bloques 2 a 5. Las rutas son relativas a VITE_API_URL, que termina en /api.
+
+// Devuelve { accessToken, tokenType, expiresIn, user }.
 export const login = (email, password) =>
   USE_MOCK ? mock.login(email, password) : request(() => api.post('/auth/login', { email, password }))
 
-export const registerClient = (data) =>
-  USE_MOCK ? mock.registerClient(data) : request(() => api.post('/auth/register/client', data))
+// Un solo endpoint para cliente y técnico: el rol va en el body. Devuelve el usuario, sin token.
+export const register = (body) => (USE_MOCK ? mock.register(body) : request(() => api.post('/auth/register', body)))
 
-export const registerTechnician = (data) =>
-  USE_MOCK ? mock.registerTechnician(data) : request(() => api.post('/auth/register/technician', data))
-
-export const getMe = () => (USE_MOCK ? mock.getMe() : request(() => api.get('/users/me')))
+export const getMe = () => (USE_MOCK ? mock.getMe() : request(() => api.get('/usuarios/me')))

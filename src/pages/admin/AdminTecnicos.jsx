@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import CargaDatos from '../../components/dashboard/CargaDatos.jsx'
 import Alert from '../../components/ui/Alert.jsx'
 import Button from '../../components/ui/Button.jsx'
 import Card from '../../components/ui/Card.jsx'
@@ -6,8 +7,8 @@ import EmptyState from '../../components/ui/EmptyState.jsx'
 import Modal from '../../components/ui/Modal.jsx'
 import { listarEspecialidades } from '../../constants/especialidades.js'
 import { MENSAJES } from '../../constants/mensajes.js'
-import { ESTADOS_TECNICO, getApprovalStatus } from '../../router/roles.js'
-import { listTecnicos, setEstadoTecnico } from '../../services/authMock.js'
+import { ESTADOS_TECNICO } from '../../router/roles.js'
+import { getTecnicos, setAprobacion } from '../../services/adminService.js'
 
 const TABS = [
   { estado: ESTADOS_TECNICO.PENDIENTE, label: 'Pendientes' },
@@ -22,19 +23,36 @@ const EMPTY_MESSAGES = {
 }
 
 export default function AdminTecnicos() {
-  const [tecnicos, setTecnicos] = useState(listTecnicos)
+  const [tecnicos, setTecnicos] = useState(null)
+  const [cargaError, setCargaError] = useState('')
+  // Cambia después de aprobar o rechazar, para volver a pedir el listado.
+  const [version, setVersion] = useState(0)
+  const [procesando, setProcesando] = useState(false)
   const [tab, setTab] = useState(ESTADOS_TECNICO.PENDIENTE)
   const [feedback, setFeedback] = useState(null)
   const [tecnicoARechazar, setTecnicoARechazar] = useState(null)
 
-  const handleEstado = (tecnico, estado) => {
+  useEffect(() => {
+    let activo = true
+    getTecnicos()
+      .then((lista) => activo && setTecnicos(lista))
+      .catch((err) => activo && setCargaError(err.message))
+    return () => {
+      activo = false
+    }
+  }, [version])
+
+  const handleEstado = async (tecnico, estado) => {
+    setProcesando(true)
     try {
-      setEstadoTecnico(tecnico.id, estado)
-      setTecnicos(listTecnicos())
+      await setAprobacion(tecnico.id, estado)
+      setVersion((v) => v + 1)
       const message = estado === ESTADOS_TECNICO.APROBADO ? MENSAJES.tecnicoAprobado : MENSAJES.tecnicoRechazado
       setFeedback({ variant: 'success', text: message(tecnico.name) })
     } catch (err) {
       setFeedback({ variant: 'error', text: err.message })
+    } finally {
+      setProcesando(false)
     }
   }
 
@@ -43,8 +61,8 @@ export default function AdminTecnicos() {
     setTecnicoARechazar(null)
   }
 
-  const visibles = tecnicos.filter((t) => getApprovalStatus(t) === tab)
-  const count = (estado) => tecnicos.filter((t) => getApprovalStatus(t) === estado).length
+  const visibles = (tecnicos ?? []).filter((t) => t.approvalStatus === tab)
+  const count = (estado) => (tecnicos ?? []).filter((t) => t.approvalStatus === estado).length
 
   return (
     <section className="mx-auto max-w-4xl p-6">
@@ -80,36 +98,40 @@ export default function AdminTecnicos() {
         </div>
       )}
 
-      {visibles.length === 0 ? (
-        <EmptyState className="mt-6" title={EMPTY_MESSAGES[tab]} />
-      ) : (
-        <ul className="mt-4 space-y-3">
-          {visibles.map((tecnico) => (
-            <Card
-              as="li"
-              key={tecnico.id}
-              className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
-            >
-              <div className="text-body-sm">
-                <p className="font-semibold text-ink">{tecnico.name}</p>
-                <p className="text-ink-muted">{tecnico.email}</p>
-                <p className="mt-1 text-ink-muted">
-                  {listarEspecialidades((tecnico.technician?.specialties ?? []).map((e) => e.category))} ·{' '}
-                  {(tecnico.technician?.neighborhoods ?? []).join(', ')}
-                </p>
-              </div>
-              {tab === ESTADOS_TECNICO.PENDIENTE && (
-                <div className="flex gap-2">
-                  <Button onClick={() => handleEstado(tecnico, ESTADOS_TECNICO.APROBADO)}>Aprobar</Button>
-                  <Button variant="danger" onClick={() => setTecnicoARechazar(tecnico)}>
-                    Rechazar
-                  </Button>
+      <CargaDatos loading={tecnicos === null && !cargaError} error={cargaError}>
+        {visibles.length === 0 ? (
+          <EmptyState className="mt-6" title={EMPTY_MESSAGES[tab]} />
+        ) : (
+          <ul className="mt-4 space-y-3">
+            {visibles.map((tecnico) => (
+              <Card
+                as="li"
+                key={tecnico.id}
+                className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div className="text-body-sm">
+                  <p className="font-semibold text-ink">{tecnico.name}</p>
+                  <p className="text-ink-muted">{tecnico.email}</p>
+                  <p className="mt-1 text-ink-muted">
+                    {listarEspecialidades(tecnico.specialties.map((e) => e.category))} ·{' '}
+                    {tecnico.neighborhoods.map((b) => b.name).join(', ')}
+                  </p>
                 </div>
-              )}
-            </Card>
-          ))}
-        </ul>
-      )}
+                {tab === ESTADOS_TECNICO.PENDIENTE && (
+                  <div className="flex gap-2">
+                    <Button disabled={procesando} onClick={() => handleEstado(tecnico, ESTADOS_TECNICO.APROBADO)}>
+                      Aprobar
+                    </Button>
+                    <Button variant="danger" disabled={procesando} onClick={() => setTecnicoARechazar(tecnico)}>
+                      Rechazar
+                    </Button>
+                  </div>
+                )}
+              </Card>
+            ))}
+          </ul>
+        )}
+      </CargaDatos>
       <Modal
         open={tecnicoARechazar !== null}
         title="Rechazar técnico"

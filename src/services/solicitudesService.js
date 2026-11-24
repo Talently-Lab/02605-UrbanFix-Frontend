@@ -2,7 +2,7 @@ import { api } from './api.js'
 import { request, USE_MOCK } from './request.js'
 import * as mock from './solicitudesMock.js'
 
-// Rutas del contrato de la API. Cada función devuelve { items, nextCursor }.
+// Contrato de API, bloques 10, 11, 16 y 21. Cada función devuelve un array ([] si no hay resultados).
 export const getMisSolicitudes = () =>
   USE_MOCK ? mock.getMisSolicitudes() : request(() => api.get('/solicitudes/mias'))
 

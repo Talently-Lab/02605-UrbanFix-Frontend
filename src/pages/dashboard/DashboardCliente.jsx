@@ -44,7 +44,7 @@ const RECIENTES = 4
 export default function DashboardCliente() {
   const { user } = useAuth()
   const { data, loading, error } = useAsync(getMisSolicitudes)
-  const solicitudes = data?.items ?? []
+  const solicitudes = data ?? []
   const vacio = !loading && solicitudes.length === 0
 
   return (
@@ -159,7 +159,7 @@ function SinSolicitudes() {
 
 function ConSolicitudes({ solicitudes }) {
   const aceptada = solicitudes.find((s) => s.status === ESTADOS_SOLICITUD.ACEPTADA)
-  const pendiente = solicitudes.find((s) => s.status === ESTADOS_SOLICITUD.PENDIENTE && s.currentOffer)
+  const pendiente = solicitudes.find((s) => s.status === ESTADOS_SOLICITUD.PENDIENTE && s.offer)
   const recientes = [...solicitudes].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, RECIENTES)
   const resumen = ESTADOS_RESUMEN.map((estado) => ({
     estado,
@@ -189,9 +189,9 @@ function ConSolicitudes({ solicitudes }) {
           <aside className="flex flex-col gap-2 rounded-xl border border-surface-200 bg-surface-100 px-5 py-6 lg:p-5">
             <h2 className="text-h5 text-ink">Una solicitud sigue pendiente</h2>
             <p className="text-body text-ink-muted">
-              {pendiente.currentOffer.technicianName} tiene hasta el {formatFechaHora(pendiente.currentOffer.expiresAt)}{' '}
-              para responder tu solicitud de {getEspecialidadLabel(pendiente.category).toLowerCase()}. Si no responde,
-              vas a poder elegir otro técnico.
+              {pendiente.offer.technicianName} tiene hasta el {formatFechaHora(pendiente.offer.expiresAt)} para
+              responder tu solicitud de {getEspecialidadLabel(pendiente.category).toLowerCase()}. Si no responde, vas a
+              poder elegir otro técnico.
             </p>
           </aside>
         )}
@@ -296,4 +296,4 @@ function ListaRecientes({ solicitudes }) {
 }
 
 // Asignado, o el que tiene la oferta mientras está pendiente.
-const nombreTecnico = (s) => s.technicianName ?? s.currentOffer?.technicianName ?? 'Sin técnico'
+const nombreTecnico = (s) => s.technicianName ?? s.offer?.technicianName ?? 'Sin técnico'

@@ -1,15 +1,18 @@
 import { ESTADOS_SOLICITUD } from '../constants/solicitudes.js'
 import { ROLES } from '../router/roles.js'
-import { getCurrentUserId, listUsuarios, wait } from './authMock.js'
+import { findUser, getCurrentUserId, wait } from './authMock.js'
+import { BARRIOS_MOCK } from './catalogosService.js'
 
 // Placeholder: solicitudes simuladas en localStorage hasta tener la API.
-// Siguen la forma del contrato y suman campos que se pidieron a Backend para las pantallas
-// (description, neighborhoodName y technicianName en los listados).
+// Cada listado devuelve los campos de su bloque del contrato (docs/api-contract.md). La dirección exacta
+// y el teléfono nunca salen en los listados (D-018, D-032).
 const SOLICITUDES_KEY = 'urbanfix:solicitudes-v1'
 
 function readSolicitudes() {
   try {
-    return JSON.parse(localStorage.getItem(SOLICITUDES_KEY)) ?? []
+    const guardadas = JSON.parse(localStorage.getItem(SOLICITUDES_KEY)) ?? []
+    // Las guardadas antes de este cambio usaban `currentOffer`.
+    return guardadas.map(({ currentOffer, ...s }) => ({ ...s, offer: s.offer ?? currentOffer ?? null }))
   } catch {
     return []
   }
@@ -17,37 +20,89 @@ function readSolicitudes() {
 
 const saveSolicitudes = (solicitudes) => localStorage.setItem(SOLICITUDES_KEY, JSON.stringify(solicitudes))
 
-const lista = (items) => ({ items, nextCursor: null })
+const neighborhoodId = (s) => BARRIOS_MOCK.find((b) => b.name === s.neighborhoodName)?.id ?? null
 
-// Simula GET /solicitudes/mias: las solicitudes del cliente autenticado.
+// Campos comunes a todos los listados.
+const resumen = (s) => ({
+  id: s.id,
+  category: s.category,
+  description: s.description,
+  neighborhoodId: neighborhoodId(s),
+  neighborhoodName: s.neighborhoodName,
+  preferredTime: s.preferredTime ?? 'ANY',
+  status: s.status,
+})
+
+// Una oferta es vigente si sigue PENDING y no pasó su expiresAt (contrato, bloque 11). La solicitud puede
+// seguir PENDING con la oferta vencida o rechazada: en ese caso el cliente tiene que elegir otro técnico.
+const ofertaVigente = (s) =>
+  s.status === ESTADOS_SOLICITUD.PENDIENTE &&
+  s.offer?.status === 'PENDING' &&
+  s.offer.expiresAt > new Date().toISOString()
+
+// Simula GET /solicitudes/mias: las solicitudes del cliente autenticado (bloque 10).
+// `offer` (solo si está vigente) lo confirmó Backend el 22/11: todavía no figura en el contrato.
 export async function getMisSolicitudes() {
   await wait()
   const clientId = getCurrentUserId()
-  return lista(readSolicitudes().filter((s) => s.clientId === clientId))
+  return readSolicitudes()
+    .filter((s) => s.clientId === clientId)
+    .map((s) => ({
+      ...resumen(s),
+      technicianId: s.technicianId,
+      technicianName: s.technicianName,
+      createdAt: s.createdAt,
+      acceptedAt: s.acceptedAt ?? null,
+      offer: ofertaVigente(s) ? { technicianName: s.offer.technicianName, expiresAt: s.offer.expiresAt } : null,
+    }))
 }
 
-// Simula GET /solicitudes: las que tienen una oferta vigente para el técnico autenticado.
-// Sin dirección exacta antes de aceptar (D-018).
+// Simula GET /solicitudes: las ofertas vigentes dirigidas al técnico autenticado (bloque 11).
 export async function getSolicitudesParaRevisar() {
   await wait()
   const technicianId = getCurrentUserId()
-  const items = readSolicitudes()
-    .filter((s) => s.status === ESTADOS_SOLICITUD.PENDIENTE && s.currentOffer?.technicianId === technicianId)
-    .map(({ addressLine: _addressLine, ...solicitud }) => solicitud)
-  return lista(items)
+  return readSolicitudes()
+    .filter((s) => ofertaVigente(s) && s.offer.technicianId === technicianId)
+    .map((s) => ({
+      ...resumen(s),
+      offer: { id: s.offer.id, status: s.offer.status, createdAt: s.offer.createdAt, expiresAt: s.offer.expiresAt },
+    }))
 }
 
-// Simula GET /tecnico/trabajos: las solicitudes asignadas al técnico autenticado.
+// Simula GET /tecnico/trabajos: las solicitudes asignadas al técnico autenticado (bloque 16).
 export async function getMisTrabajos() {
   await wait()
   const technicianId = getCurrentUserId()
-  return lista(readSolicitudes().filter((s) => s.technicianId === technicianId))
+  return readSolicitudes()
+    .filter((s) => s.technicianId === technicianId)
+    .map((s) => ({
+      ...resumen(s),
+      acceptedAt: s.acceptedAt ?? null,
+      completedAt: s.completedAt ?? null,
+      cancelledAt: s.cancelledAt ?? null,
+    }))
 }
 
-// Simula GET /admin/solicitudes: todas, solo con el barrio (D-032). Sin dirección ni teléfono.
+// Simula GET /admin/solicitudes: todas, con el barrio como único dato de ubicación (bloque 21).
+// Sin descripción: el contrato todavía no confirma si el admin la recibe.
 export async function getTodasLasSolicitudes() {
   await wait()
-  return lista(readSolicitudes().map(({ addressLine: _addressLine, ...solicitud }) => solicitud))
+  return readSolicitudes().map((s) => {
+    const { description: _description, ...campos } = resumen(s)
+    const cliente = findUser(s.clientId)
+    return {
+      ...campos,
+      clientId: s.clientId,
+      clientName: cliente?.name ?? 'Cliente de ejemplo',
+      clientEmail: cliente?.email ?? null,
+      technicianId: s.technicianId,
+      technicianName: s.technicianName,
+      createdAt: s.createdAt,
+      acceptedAt: s.acceptedAt ?? null,
+      completedAt: s.completedAt ?? null,
+      cancelledAt: s.cancelledAt ?? null,
+    }
+  })
 }
 
 // --- Datos de ejemplo (solo en desarrollo) ---
@@ -55,8 +110,17 @@ export async function getTodasLasSolicitudes() {
 const horasDesdeAhora = (horas) => new Date(Date.now() + horas * 60 * 60 * 1000).toISOString()
 const diasAtras = (dias) => horasDesdeAhora(-dias * 24)
 
+const oferta = (technicianId, technicianName, horasRestantes) => ({
+  id: crypto.randomUUID(),
+  technicianId,
+  technicianName,
+  status: 'PENDING',
+  createdAt: horasDesdeAhora(horasRestantes - 24),
+  expiresAt: horasDesdeAhora(horasRestantes),
+})
+
 function ejemplosCliente(clientId) {
-  const base = { clientId, neighborhoodName: 'Palermo', addressLine: 'Calle de ejemplo 123' }
+  const base = { clientId, neighborhoodName: 'Palermo', preferredTime: 'ANY' }
   return [
     {
       ...base,
@@ -65,12 +129,7 @@ function ejemplosCliente(clientId) {
       status: ESTADOS_SOLICITUD.PENDIENTE,
       technicianId: null,
       technicianName: null,
-      currentOffer: {
-        technicianId: 'tecnico-ejemplo-1',
-        technicianName: 'Martín Ledesma',
-        status: 'PENDING',
-        expiresAt: horasDesdeAhora(18),
-      },
+      offer: oferta('tecnico-ejemplo-1', 'Martín Ledesma', 18),
       createdAt: diasAtras(0),
     },
     {
@@ -80,8 +139,9 @@ function ejemplosCliente(clientId) {
       status: ESTADOS_SOLICITUD.ACEPTADA,
       technicianId: 'tecnico-ejemplo-2',
       technicianName: 'Lucía Benítez',
-      currentOffer: null,
+      offer: null,
       createdAt: diasAtras(1),
+      acceptedAt: diasAtras(0.5),
     },
     {
       ...base,
@@ -90,8 +150,9 @@ function ejemplosCliente(clientId) {
       status: ESTADOS_SOLICITUD.EN_CURSO,
       technicianId: 'tecnico-ejemplo-3',
       technicianName: 'Diego Paz',
-      currentOffer: null,
+      offer: null,
       createdAt: diasAtras(2),
+      acceptedAt: diasAtras(1.5),
     },
     {
       ...base,
@@ -100,38 +161,37 @@ function ejemplosCliente(clientId) {
       status: ESTADOS_SOLICITUD.COMPLETADA,
       technicianId: 'tecnico-ejemplo-4',
       technicianName: 'Romina Acosta',
-      currentOffer: null,
+      offer: null,
       createdAt: diasAtras(10),
+      acceptedAt: diasAtras(9),
+      completedAt: diasAtras(8),
     },
   ]
 }
 
 function ejemplosTecnico(technicianId, technicianName) {
-  const oferta = (horas) => ({ technicianId, technicianName, status: 'PENDING', expiresAt: horasDesdeAhora(horas) })
-  const base = { clientId: 'cliente-ejemplo', category: 'ELECTRICITY', technicianName: null, technicianId: null }
+  const base = { clientId: 'cliente-ejemplo', category: 'ELECTRICITY', preferredTime: 'ANY' }
+  const pendiente = { ...base, status: ESTADOS_SOLICITUD.PENDIENTE, technicianId: null, technicianName: null }
   return [
     {
-      ...base,
+      ...pendiente,
       description: 'Salta la térmica al usar el horno',
       neighborhoodName: 'Balvanera',
-      status: ESTADOS_SOLICITUD.PENDIENTE,
-      currentOffer: oferta(18),
+      offer: oferta(technicianId, technicianName, 18),
       createdAt: diasAtras(0),
     },
     {
-      ...base,
+      ...pendiente,
       description: 'Luz de pasillo que parpadea',
       neighborhoodName: 'Villa Crespo',
-      status: ESTADOS_SOLICITUD.PENDIENTE,
-      currentOffer: oferta(20),
+      offer: oferta(technicianId, technicianName, 20),
       createdAt: diasAtras(0),
     },
     {
-      ...base,
+      ...pendiente,
       description: 'Cambiar tablero con llaves térmicas',
       neighborhoodName: 'Palermo',
-      status: ESTADOS_SOLICITUD.PENDIENTE,
-      currentOffer: oferta(3),
+      offer: oferta(technicianId, technicianName, 3),
       createdAt: diasAtras(1),
     },
     {
@@ -141,8 +201,10 @@ function ejemplosTecnico(technicianId, technicianName) {
       status: ESTADOS_SOLICITUD.COMPLETADA,
       technicianId,
       technicianName,
-      currentOffer: null,
+      offer: null,
       createdAt: diasAtras(15),
+      acceptedAt: diasAtras(14),
+      completedAt: diasAtras(13),
     },
   ]
 }
@@ -150,8 +212,7 @@ function ejemplosTecnico(technicianId, technicianName) {
 // Carga solicitudes de ejemplo para el usuario con sesión iniciada. Se usa desde la consola del navegador:
 // urbanfixMock.cargarEjemplos() · urbanfixMock.borrarSolicitudes()
 function cargarEjemplos() {
-  const userId = getCurrentUserId()
-  const user = listUsuarios().find((u) => u.id === userId)
+  const user = findUser(getCurrentUserId())
   if (!user) return 'Iniciá sesión como cliente o técnico y volvé a probar.'
 
   const ejemplos =
